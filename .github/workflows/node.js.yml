@@ -34,13 +34,13 @@ jobs:
       with:
         local: build/
         remote: /root/fd-build/
-        host: 13.40.212.238
+        host: 34.89.11.237
         username: root
         password: ${{secrets.PSWD}}
     - name: restart nginx
       uses: appleboy/ssh-action@master
       with:
-        host: 13.40.212.238
+        host: 34.89.11.237
         username: root
         password: ${{secrets.PSWD}}
         port: 22
