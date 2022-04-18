@@ -15,13 +15,16 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios'
 import md5 from 'js-md5'
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 
-function Copyright(props) {
+function Copyright() {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+    <Typography variant="body2" color="text.secondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="https://fd.shimonzhan.com">
+        COMP6251 ZZ. XZ. YZ.
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -125,6 +128,22 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
+              {/* <Grid item xs={12}>
+                {/* <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={age}
+                  label="Age"
+                  onChange={handleChange}
+                >
+                  <MenuItem value={10}>Ten</MenuItem>
+                  <MenuItem value={20}>Twenty</MenuItem>
+                  <MenuItem value={30}>Thirty</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid> */}
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}

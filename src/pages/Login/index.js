@@ -16,12 +16,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios'
 import md5 from 'js-md5'
 
-function Copyright(props) {
+function Copyright() {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+    <Typography variant="body2" color="text.secondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="https://fd.shimonzhan.com">
+        COMP6251 ZZ. XZ. YZ.
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
