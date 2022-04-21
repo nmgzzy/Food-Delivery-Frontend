@@ -1,26 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 export default function Activate() {
+    const [data, setData] = useState("Activating")
     const sendToken = () => {
-        let ret = 0;
         axios.get('https://fd.shimonzhan.com/api/user/activate'+window.location.search)
         .then(function (res) {
             console.log(res);
-            ret = 1;
+            setData(res.data.message)
         })
         .catch(function (err) {
             console.log(err);
+            setData(err.data.message)
         });
-        return ret;
     }
 
-    const ret = sendToken();
+    useEffect(sendToken, []);
 
     return <div>
-        <h1>Activate Success:{ret}</h1>
-        <Button href="/login" variant='contained' sx={{margin:"10px"}}>Login</Button>
-        <Button href='/' variant='contained' sx={{margin:"10px"}}>Home</Button>
+        <Box sx={{display:'flex', justifyContent:'center'}}>
+            <h1>{data}</h1>
+        </Box>
+        <Box sx={{display:'flex', justifyContent:'center'}}>
+            <Button href="/login" variant='contained' sx={{margin:"10px"}}>Login</Button>
+            <Button href='/' variant='contained' sx={{margin:"10px"}}>Home</Button>
+        </Box>
     </div>
 }
