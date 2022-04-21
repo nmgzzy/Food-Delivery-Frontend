@@ -4,6 +4,7 @@ import Home from "./pages/Home"
 import Login from "./pages/Login"
 import SignUp from "./pages/Signup";
 import Order from "./pages/Order";
+import Activate from "./pages/Activate";
 // import Trolley from "./Trolley";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/order" element={<Order />} />
+          <Route path="/activate" element={<Activate />} />
         </Routes>
       </div>
     </BrowserRouter>

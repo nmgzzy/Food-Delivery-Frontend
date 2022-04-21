@@ -1,7 +1,5 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
-import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -10,25 +8,13 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import * as Colors from '@mui/material/colors';
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://fd.shimonzhan.com">
-        COMP6251 ZZ. XZ. YZ.
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import Copyright from '../../components/Copyright';
+import ResponsiveAppBar from '../../components/ResponsiveAppBar';
+import MyAppBar from '../../components/MyAppBar';
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -43,19 +29,12 @@ const theme = createTheme({
 	},
 });
 
-
 export default function Home() {
+  
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <DeliveryDiningIcon sx={{ mr: 2 }} />
-          <Typography variant="h5" color="inherit" noWrap>
-            Food Delivery
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <MyAppBar />
       <main>
         {/* Hero unit */}
         <Box
@@ -73,7 +52,7 @@ export default function Home() {
               color="text.primary"
               gutterBottom
             >
-              Album layout
+              Food Delivery
             </Typography>
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
               Something short and leading about the collection below—its contents,
