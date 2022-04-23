@@ -18,10 +18,8 @@ import { theme } from '../../components/Theme';
 import {getCategoriesRequest} from '../../utils/requests'
 //import { UseUser } from '../../components/UserContext'
 
-const cards = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-
 export default function Home() {
-  const [categories, setCategories] = React.useState();
+  const [categories, setCategories] = React.useState([]);
   const handleAddrSubmit = (event)=>{
     event.preventDefault();
     //...
@@ -35,14 +33,13 @@ export default function Home() {
   //const { user } = UseUser()
   React.useEffect(()=>{
     getCategoriesRequest(setCategories);
-  }, [categories]);
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <MyAppBar />
       <main>
-        {/* Hero unit */}
         <Box
           sx={{
             //backgroundImage: 'url("https://oss.fd.shimonzhan.com/home/testcover.jpg") no-repeat left top',
@@ -84,10 +81,9 @@ export default function Home() {
           </Container>
         </Box>
         <Container sx={{ py: 8 }} maxWidth="md">
-          {/* End hero unit */}
           <Grid container spacing={4}>
             {categories.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
+              <Grid item key={card.id} xs={12} sm={6} md={4}>
                 <Card
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
                 >

@@ -61,6 +61,7 @@ export function getCategoriesRequest(setCategories) {
   axios.get('https://fd.shimonzhan.com/api/restaurant/getCategories')
     .then(function (res) {
       setCategories(res.data.data.categories);
+      console.log(res.data.data.categories);
     })
     .catch(function (err) {
       console.log(err);
