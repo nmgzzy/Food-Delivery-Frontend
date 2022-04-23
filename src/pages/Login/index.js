@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,43 +11,31 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from 'axios'
-import md5 from 'js-md5'
+import { ThemeProvider } from '@mui/material/styles';
 import Copyright from '../../components/Copyright';
-
-const theme = createTheme();
+import MyAppBar from '../../components/MyAppBar';
+import { theme } from '../../components/Theme';
+import { loginRequest } from '../../utils/requests';
+import { UseUser } from '../../components/UserContext'
 
 export default function Login() {
+
+  const { login } = UseUser();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: md5(data.get('password')),
-    });
-    axios.post('https://fd.shimonzhan.com/api/user/login', 
-      {
-        username: data.get('email'),
-        password: md5(data.get('password')),
-      }
-    )
-    .then(function (res) {
-        console.log(res);
-        window.location.href = '/'
-    })
-    .catch(function (err) {
-        console.log(err);
-    });
+    loginRequest(data, login);
   };
 
   return (
     <ThemeProvider theme={theme}>
+      <MyAppBar />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
             marginTop: 8,
+            marginBottom: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -59,6 +47,7 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Login
           </Typography>
+          
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
@@ -93,14 +82,14 @@ export default function Login() {
               Login
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="/" variant="body2">
+              <Grid item>
+                <Link href="/" variant="body1" color="text.secondary">
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href="/signup" variant="body1" color="text.secondary">
+                  Don't have an account? Sign Up Here.
                 </Link>
               </Grid>
             </Grid>

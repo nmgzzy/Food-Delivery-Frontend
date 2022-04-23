@@ -17,6 +17,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 import Button from '@mui/material/Button';
+import { UseUser } from './UserContext'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -61,6 +62,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function MyAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const { user, logout } = UseUser();
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -99,9 +101,25 @@ export default function MyAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My order</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Log out</MenuItem>
+      <MenuItem onClick={()=>{
+        handleMenuClose();
+        if (user.id === 0) {
+          window.location.href = '/login';
+        }
+        else{
+          window.location.href = '/profile';
+        }
+        }}>Profile</MenuItem>
+      <MenuItem onClick={()=>{
+        handleMenuClose();
+        if (user.id === 0) {
+          window.location.href = '/login';
+        }
+        else{
+          window.location.href = '/order';
+        }
+        }}>My order</MenuItem>
+      <MenuItem onClick={()=>{handleMenuClose();logout();}}>Log out</MenuItem>
     </Menu>
   );
 
@@ -161,10 +179,10 @@ export default function MyAppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar sx={{
-          display:"flex",
-          justifyContent:'certer',
+          display: "flex",
+          justifyContent: 'space-between',
         }}>
-          <Button 
+          <Button
             href='/'
             size="large"
             color="inherit"
@@ -189,7 +207,6 @@ export default function MyAppBar() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
-          <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={1} color="error">
@@ -214,7 +231,7 @@ export default function MyAppBar() {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <Avatar alt="Remy Sharp" src="https://oss.fd.shimonzhan.com/avatar/2333.jpg" />
+              <Avatar alt="Remy Sharp" src={user.avatar} />
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>

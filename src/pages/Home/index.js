@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -9,28 +9,34 @@ import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import * as Colors from '@mui/material/colors';
+import { ThemeProvider } from '@mui/material/styles';
 import Copyright from '../../components/Copyright';
-import ResponsiveAppBar from '../../components/ResponsiveAppBar';
 import MyAppBar from '../../components/MyAppBar';
+import { theme } from '../../components/Theme';
+import {getCategoriesRequest} from '../../utils/requests'
+//import { UseUser } from '../../components/UserContext'
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-const theme = createTheme({
-	palette: {
-		primary: {
-			main: Colors.orange[200],
-		},
-    background: {
-      paper: Colors.orange[50],
-    },
-	},
-});
+const cards = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
 export default function Home() {
-  
+  const [categories, setCategories] = React.useState();
+  const handleAddrSubmit = (event)=>{
+    event.preventDefault();
+    //...
+  }
+
+  const handleCategoryClick = (event)=>{
+    event.preventDefault();
+    //...
+  }
+
+  //const { user } = UseUser()
+  React.useEffect(()=>{
+    getCategoriesRequest(setCategories);
+  }, [categories]);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -39,7 +45,8 @@ export default function Home() {
         {/* Hero unit */}
         <Box
           sx={{
-            backgroundImage: 'url("https://source.unsplash.com/random")',
+            //backgroundImage: 'url("https://oss.fd.shimonzhan.com/home/testcover.jpg") no-repeat left top',
+            //backgroundColor: '#000000',
             pt: 8,
             pb: 6,
           }}
@@ -55,25 +62,31 @@ export default function Home() {
               Food Delivery
             </Typography>
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
-              Something short and leading about the collection below—its contents,
-              the creator, etc. Make it short and sweet, but not too short so folks
-              don&apos;t simply skip over it entirely.
+              Find Your Favourite Food
             </Typography>
-            <Stack
-              sx={{ pt: 4 }}
-              direction="row"
-              spacing={2}
-              justifyContent="center"
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleAddrSubmit}
             >
-              <Button variant="contained">Main call to action</Button>
-              <Button variant="outlined">Secondary action</Button>
-            </Stack>
+              <Stack
+                sx={{ pt: 4 }}
+                direction="row"
+                spacing={2}
+                justifyContent="center"
+              >
+                <TextField id="Postcode" label="Postcode" variant="outlined" />
+                <Button type="submit" variant="contained">find</Button>
+              </Stack>
+              
+            </Box>
+            
           </Container>
         </Box>
         <Container sx={{ py: 8 }} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {cards.map((card) => (
+            {categories.map((card) => (
               <Grid item key={card} xs={12} sm={6} md={4}>
                 <Card
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
@@ -84,21 +97,20 @@ export default function Home() {
                       // 16:9
                       pt: '56.25%',
                     }}
-                    image="https://source.unsplash.com/random"
+                    image={card.photo}
                     alt="random"
                   />
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Heading
+                      {card.name}
                     </Typography>
-                    <Typography>
+                    {/* <Typography>
                       This is a media card. You can use this section to describe the
                       content.
-                    </Typography>
+                    </Typography> */}
                   </CardContent>
                   <CardActions>
-                    <Button size="small">View</Button>
-                    <Button size="small">Edit</Button>
+                    <Button size="small" onClick={handleCategoryClick}>View</Button>
                   </CardActions>
                 </Card>
               </Grid>
