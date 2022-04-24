@@ -1,4 +1,5 @@
 import React from 'react';
+import { logoutRequest } from '../utils/requests'
 
 var defaultUser = {
   id: 0,
@@ -22,11 +23,11 @@ const setUserToLocalstorage = (user) => {
   );
 };
 
-const removeUserFromLocalstorage = () => {
+export const removeUserFromLocalstorage = () => {
   window.localStorage.removeItem(key)
 }
 
-const getUserFromLocalstorage = () => {
+export const getUserFromLocalstorage = () => {
   let storageUser = window.localStorage.getItem(key);
   if (storageUser) return JSON.parse(storageUser);
 };
@@ -43,8 +44,9 @@ export const UserProvider = ({ children }) => {
   };
   
   const logout = () => {
-    removeUserFromLocalstorage()
-    setUser(defaultUser)
+    removeUserFromLocalstorage();
+    setUser(defaultUser);
+    logoutRequest();
   };
 
   return (

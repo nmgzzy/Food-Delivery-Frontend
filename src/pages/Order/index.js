@@ -4,6 +4,8 @@ import Gmap from '../../components/Gmap';
 export default function Order() {
 
   return (
-    <Gmap />
+    <div>
+      {/* <Gmap /> */}
+    </div>
   );
 }

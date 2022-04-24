@@ -9,20 +9,32 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { ThemeProvider } from '@mui/material/styles';
-import MyAppBar from '../../components/MyAppBar';
 import Copyright from '../../components/Copyright';
-import { theme } from '../../components/Theme'
 import queryString from 'query-string';
 import { signupRequest } from '../../utils/requests';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function SignUp() {
   const roles = { 'ROLE_CUSTOMER': "Customer", 'ROLE_RESTAURANT_OWNER': "Restaurant owner", 'ROLE_DELIVERY_MAN': "Delivery man" };
   const [role, setRole] = useState('ROLE_CUSTOMER');
+  const [open, setOpen] = React.useState({open:false, msg:"", type:"success"});
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen({open:false, msg:open.msg, type:open.type});
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    signupRequest(data, role);
+    signupRequest(data, role, setOpen);
   }
 
   useEffect(() => {
@@ -39,8 +51,7 @@ export default function SignUp() {
   }, [role]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <MyAppBar />
+    <div>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -136,7 +147,10 @@ export default function SignUp() {
           </Box>
         </Box>
         <Copyright sx={{ mt: 5 }} />
+        <Snackbar open={open.open} onClose={handleClose} autoHideDuration={2000} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+          <Alert children={open.msg} onClose={handleClose} severity={open.type} sx={{ width: '100%' }}/>
+        </Snackbar>
       </Container>
-    </ThemeProvider>
+    </div>
   );
 }

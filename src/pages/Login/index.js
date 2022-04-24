@@ -11,25 +11,35 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { ThemeProvider } from '@mui/material/styles';
 import Copyright from '../../components/Copyright';
-import MyAppBar from '../../components/MyAppBar';
-import { theme } from '../../components/Theme';
 import { loginRequest } from '../../utils/requests';
 import { UseUser } from '../../components/UserContext'
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function Login() {
-
   const { login } = UseUser();
+  const [open, setOpen] = React.useState({open:false, msg:"", type:"success"});
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen({open:false, msg:open.msg, type:open.type});
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    loginRequest(data, login);
+    loginRequest(data, login, setOpen);
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <MyAppBar />
+    <div>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -47,7 +57,7 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Login
           </Typography>
-          
+
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
@@ -96,7 +106,10 @@ export default function Login() {
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
+        <Snackbar open={open.open} onClose={handleClose} autoHideDuration={2000} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+          <Alert children={open.msg} onClose={handleClose} severity={open.type} sx={{ width: '100%' }}/>
+        </Snackbar>
       </Container>
-    </ThemeProvider>
+    </div>
   );
 }

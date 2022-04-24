@@ -11,34 +11,30 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
-import { ThemeProvider } from '@mui/material/styles';
 import Copyright from '../../components/Copyright';
-import MyAppBar from '../../components/MyAppBar';
-import { theme } from '../../components/Theme';
-import {getCategoriesRequest} from '../../utils/requests'
+import { getCategoriesRequest } from '../../utils/requests'
 //import { UseUser } from '../../components/UserContext'
 
 export default function Home() {
   const [categories, setCategories] = React.useState([]);
-  const handleAddrSubmit = (event)=>{
+  const handleAddrSubmit = (event) => {
     event.preventDefault();
     //...
   }
 
-  const handleCategoryClick = (event)=>{
+  const handleCategoryClick = (event) => {
     event.preventDefault();
     //...
   }
 
   //const { user } = UseUser()
-  React.useEffect(()=>{
+  React.useEffect(() => {
     getCategoriesRequest(setCategories);
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
+    <div>
       <CssBaseline />
-      <MyAppBar />
       <main>
         <Box
           sx={{
@@ -75,9 +71,9 @@ export default function Home() {
                 <TextField id="Postcode" label="Postcode" variant="outlined" />
                 <Button type="submit" variant="contained">find</Button>
               </Stack>
-              
+
             </Box>
-            
+
           </Container>
         </Box>
         <Container sx={{ py: 8 }} maxWidth="md">
@@ -114,7 +110,6 @@ export default function Home() {
           </Grid>
         </Container>
       </main>
-      {/* Footer */}
       <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
         <Typography variant="h6" align="center" gutterBottom>
           Footer
@@ -129,7 +124,6 @@ export default function Home() {
         </Typography>
         <Copyright />
       </Box>
-      {/* End footer */}
-    </ThemeProvider>
+    </div>
   );
 }
