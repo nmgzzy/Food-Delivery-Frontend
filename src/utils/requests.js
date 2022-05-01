@@ -99,8 +99,19 @@ export function SearchRequest(searchData, setRestaurants) {
     url: '/restaurant/searchRestaurants',
     data: searchData
   }).then((res) => {
-    console.log(res.data.data.restaurants);
     setRestaurants(res.data.data.restaurants);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function getRestaurantRequest(setRestaurant) {
+  http({
+    method: 'GET',
+    url: '/restaurant/getRestaurant',
+  }).then((res) => {
+    console.log(res.data.data);//{address/restaurant/menus[]}
+    // setRestaurant(res.data);
   }, (err) => {
     console.log(err);
   })

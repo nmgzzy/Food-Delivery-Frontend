@@ -16,6 +16,7 @@ import MyAppBar from '../../components/MyAppBar';
 import queryString from 'query-string';
 import { CardActionArea } from '@mui/material';
 import Rating from '@mui/material/Rating';
+import Pagination from '@mui/material/Pagination';
 
 function mainListItems() {
   return (
@@ -52,6 +53,7 @@ export default function Search() {
     size: 12,
     total: 0,
   });
+  const [page, setPage] = React.useState(1);
 
   React.useEffect(() => {
     getCategoriesRequest(setCategories);
@@ -60,7 +62,7 @@ export default function Search() {
     var tmp = {
       categoryId: "",
       keyword: "",
-      pageCurrent: 1,
+      pageCurrent: page,
       pageSize: cardNumber
     }
     if (qs.categoryId) {
@@ -69,23 +71,23 @@ export default function Search() {
     if (qs.keyword) {
       tmp.keyword = qs.keyword;
     }
-    if (qs.pageCurrent) {
-      tmp.pageCurrent = qs.pageCurrent;
-    }
     SearchRequest(tmp, setRestaurants);
-  }, []);
+  }, [page]);
 
   const handleRestaurantClick = (id) => {
-    //window.location.href = "/search?categoryId="+id;
+    //window.location.href = "/restaurant?restaurantId="+id;
+  }
+
+  const handleCategoryClick = (id) => {
+    window.location.href = "/search?categoryId=" + id;
   }
 
   return <div>
     <MyAppBar />
     <CssBaseline />
-    <Box sx={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'space-between', backgroundColor: 'background.paper', height: '100vh' }}>
+    <Box sx={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'space-between' }}>
       <Drawer
         variant="permanent"
-        //ModalProps={{ keepMounted: true }}
         sx={{
           maxWidth: drawerWidth,
           flex: 1,
@@ -99,7 +101,10 @@ export default function Search() {
         <List component="nav">
           <React.Fragment>
             {categories.map((item) => (
-              <ListItemButton key={item.id}>
+              <ListItemButton key={item.id} onClick={(event) => {
+                event.preventDefault();
+                handleCategoryClick(item.id);
+              }}>
                 <ListItemText primary={item.name} />
               </ListItemButton>
             ))}
@@ -133,6 +138,9 @@ export default function Search() {
             </Grid>
           ))}
         </Grid>
+        <Pagination count={restaurants.pages} shape="rounded" size='large' page={restaurants.current} onChange={(event, value) => {
+          setPage(value);
+        }} sx={{ mt: "30px" }} />
       </Container>
     </Box>
   </div>
