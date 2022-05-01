@@ -13,18 +13,20 @@ import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import Copyright from '../../components/Copyright';
 import { getCategoriesRequest } from '../../utils/requests'
+import MyAppBar from '../../components/MyAppBar';
+import { CardActionArea } from '@mui/material';
 //import { UseUser } from '../../components/UserContext'
 
 export default function Home() {
   const [categories, setCategories] = React.useState([]);
+
   const handleAddrSubmit = (event) => {
     event.preventDefault();
     //...
   }
 
-  const handleCategoryClick = (event) => {
-    event.preventDefault();
-    //...
+  const handleCategoryClick = (id) => {
+    window.location.href = "/search?categoryId="+id;
   }
 
   //const { user } = UseUser()
@@ -35,6 +37,7 @@ export default function Home() {
   return (
     <div>
       <CssBaseline />
+      <MyAppBar />
       <main>
         <Box
           sx={{
@@ -77,33 +80,30 @@ export default function Home() {
           </Container>
         </Box>
         <Container sx={{ py: 8 }} maxWidth="md">
-          <Grid container spacing={4}>
+          <Grid container spacing={2}>
             {categories.map((card) => (
               <Grid item key={card.id} xs={12} sm={6} md={4}>
                 <Card
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
                 >
-                  <CardMedia
-                    component="img"
-                    sx={{
-                      // 16:9
-                      pt: '56.25%',
-                    }}
-                    image={card.photo}
-                    alt="random"
-                  />
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      {card.name}
-                    </Typography>
-                    {/* <Typography>
-                      This is a media card. You can use this section to describe the
-                      content.
-                    </Typography> */}
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small" onClick={handleCategoryClick}>View</Button>
-                  </CardActions>
+                  <CardActionArea onClick={(event) => {
+                    event.preventDefault();
+                    handleCategoryClick(card.id);
+                  }}>
+                    <CardMedia
+                      component="img"
+                      image={card.photo}
+                      alt="random"
+                    />
+                    <CardContent sx={{ flexGrow: 1 }}>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {card.name}
+                      </Typography>
+                    </CardContent>
+                    {/* <CardActions>
+                      <Button size="small" onClick={handleCategoryClick}>View</Button>
+                    </CardActions> */}
+                  </CardActionArea>
                 </Card>
               </Grid>
             ))}

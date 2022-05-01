@@ -16,6 +16,7 @@ import { loginRequest } from '../../utils/requests';
 import { UseUser } from '../../components/UserContext'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import MyAppBar from '../../components/MyAppBar';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -40,6 +41,7 @@ export default function Login() {
 
   return (
     <div>
+      <MyAppBar/>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box

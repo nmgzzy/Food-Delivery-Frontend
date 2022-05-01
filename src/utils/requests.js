@@ -2,35 +2,35 @@ import http from './http'
 import md5 from 'js-md5';
 
 export function loginRequest(data, login, setOpen) {
-    http({
-      method: 'POST',
-      url: '/user/login',
-      data: {
-        username: data.get('email'),
-        password: md5(data.get('password')),
-      }
-    }).then((res) => {
-      if (res.data.success === true) {
-        setOpen({ open: true, msg: res.data.message, type: "success" });
-        login({
-          id: res.data.data.userInfo.id,
-          username: res.data.data.userInfo.username,
-          roleId: res.data.data.userInfo.roleId,
-          email: res.data.data.userInfo.email,
-          nickName: res.data.data.userInfo.nickName,
-          avatar: res.data.data.userInfo.avatar,
-          token: res.data.data.token
-        });
-        setTimeout(() => {
-          window.location.href = '/'
-        }, 1000);
-      }
-      else {
-        setOpen({ open: true, msg: res.data.message, type: "error" });
-      }
-    }, (err) => {
-      console.log(err);
-    })
+  http({
+    method: 'POST',
+    url: '/user/login',
+    data: {
+      username: data.get('email'),
+      password: md5(data.get('password')),
+    }
+  }).then((res) => {
+    if (res.data.success === true) {
+      setOpen({ open: true, msg: res.data.message, type: "success" });
+      login({
+        id: res.data.data.userInfo.id,
+        username: res.data.data.userInfo.username,
+        roleId: res.data.data.userInfo.roleId,
+        email: res.data.data.userInfo.email,
+        nickName: res.data.data.userInfo.nickName,
+        avatar: res.data.data.userInfo.avatar,
+        token: res.data.data.token
+      });
+      setTimeout(() => {
+        window.location.href = '/'
+      }, 1000);
+    }
+    else {
+      setOpen({ open: true, msg: res.data.message, type: "error" });
+    }
+  }, (err) => {
+    console.log(err);
+  })
 }
 
 export function logoutRequest() {
@@ -88,6 +88,19 @@ export function getCategoriesRequest(setCategories) {
     url: '/restaurant/getCategories',
   }).then((res) => {
     setCategories(res.data.data.categories);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function SearchRequest(searchData, setRestaurants) {
+  http({
+    method: 'POST',
+    url: '/restaurant/searchRestaurants',
+    data: searchData
+  }).then((res) => {
+    console.log(res.data.data.restaurants);
+    setRestaurants(res.data.data.restaurants);
   }, (err) => {
     console.log(err);
   })

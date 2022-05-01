@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import {activateRequest} from '../../utils/requests'
+import CssBaseline from '@mui/material/CssBaseline';
+import MyAppBar from '../../components/MyAppBar';
 
 export default function Activate() {
   const [data, setData] = useState("Activating")
@@ -12,6 +14,8 @@ export default function Activate() {
   useEffect(sendToken, []);
 
   return <div>
+    <CssBaseline />
+    <MyAppBar/>
     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
       <h1>{data}</h1>
     </Box>

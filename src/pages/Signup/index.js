@@ -14,6 +14,7 @@ import queryString from 'query-string';
 import { signupRequest } from '../../utils/requests';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import MyAppBar from '../../components/MyAppBar';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -52,6 +53,7 @@ export default function SignUp() {
 
   return (
     <div>
+      <MyAppBar/>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
