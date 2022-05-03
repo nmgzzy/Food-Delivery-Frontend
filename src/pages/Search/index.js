@@ -18,28 +18,6 @@ import { CardActionArea } from '@mui/material';
 import Rating from '@mui/material/Rating';
 import Pagination from '@mui/material/Pagination';
 
-function mainListItems() {
-  return (
-    <React.Fragment>
-      <ListItemButton>
-        <ListItemText primary="Dashboard" />
-      </ListItemButton>
-      <ListItemButton>
-        <ListItemText primary="Orders" />
-      </ListItemButton>
-      <ListItemButton>
-        <ListItemText primary="Customers" />
-      </ListItemButton>
-      <ListItemButton>
-        <ListItemText primary="Reports" />
-      </ListItemButton>
-      <ListItemButton>
-        <ListItemText primary="Integrations" />
-      </ListItemButton>
-    </React.Fragment>
-  )
-}
-
 const drawerWidth = 220;
 const cardNumber = 12;
 
@@ -75,7 +53,7 @@ export default function Search() {
   }, [page]);
 
   const handleRestaurantClick = (id) => {
-    //window.location.href = "/restaurant?restaurantId="+id;
+    window.location.href = "/restaurant?restaurantId="+id;
   }
 
   const handleCategoryClick = (id) => {

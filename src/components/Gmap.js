@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
-//import Box from '@mui/material/Box';
 
 const mapStyles = {
-  width: 500,
-  height: 400
+  width: 300,
+  height: 200
 };
 
 export class Gmap extends Component {
@@ -33,29 +32,29 @@ export default GoogleApiWrapper({
 })(Gmap)
 
 export function getLocation() {
+  var lat, lng;
   if (navigator.geolocation){
     navigator.geolocation.getCurrentPosition(pos=>{
-      let lat = pos.coords.latitude,
+        lat = pos.coords.latitude;
         lng = pos.coords.longitude;
-          // 获取到了用户当前位置的坐标
-        alert(lng,lat);
         console.log("lng,lat: "+lng+","+lat);
       },error=>{
         switch(error.code){
         case error.PERMISSION_DENIED:
-          console.log("请打开手机定位，并允许获取当前位置");
+          console.log("PERMISSION_DENIED");
           break;
         case error.POSITION_UNAVAILABLE:
-          console.log("定位失败，请退出重试!");
+          console.log("POSITION_UNAVAILABLE");
           break;
         case error.TIMEOUT:
-          console.log("获取位置超时，请退出重试!");
+          console.log("TIMEOUT");
           break;
         default:
-          console.log("获取定位失败！");
+          console.log("other error");
       }
     });
   }else{
-    console.log("当前浏览器不支持定位服务");
+    console.log("Current browser does not support location services");
   }
+  return {lat, lng};
 }

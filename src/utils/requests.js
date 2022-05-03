@@ -105,13 +105,35 @@ export function SearchRequest(searchData, setRestaurants) {
   })
 }
 
-export function getRestaurantRequest(setRestaurant) {
+export function getRestaurantRequest(setRestaurant, setAddress, setMenu) {
   http({
     method: 'GET',
-    url: '/restaurant/getRestaurant',
+    url: '/restaurant/getRestaurant' + window.location.search,
   }).then((res) => {
-    console.log(res.data.data);//{address/restaurant/menus[]}
-    // setRestaurant(res.data);
+    setRestaurant(res.data.data.restaurant);
+    setAddress(res.data.data.address);
+    setMenu(res.data.data.menus);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function customerAddOrder(basketList, userId, addrId, restId) {
+  var orderlist = {}
+  for(var i = 0; i < basketList.length; i++) {
+    orderlist[basketList[i].id] = basketList[i].num;
+  }
+  http({
+    method: 'POST',
+    url: '/order/customerAddOrder',
+    data: {
+      customerAddressId: addrId,
+      customerId: userId,
+      menuIdQuantityMap: orderlist,
+      restaurantId: restId
+    }
+  }).then((res) => {
+    console.log(res);
   }, (err) => {
     console.log(err);
   })
