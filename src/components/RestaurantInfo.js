@@ -4,7 +4,8 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-// import Gmap from './Gmap';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import Rating from '@mui/material/Rating';
 
 const Img = styled('img')({
@@ -30,7 +31,7 @@ const Img = styled('img')({
 //   "longitude": -1.3948494
 // },
 export default function RestaurantInfo(props) {
-  const address = props.addr.firstAddress + ', ' + ((props.addr.secondAddress==="") ? "" : (props.addr.secondAddress + ', ')) + props.addr.city + ', ' + props.addr.postcode;
+  const address = props.addr.firstAddress + ', ' + ((props.addr.secondAddress === "") ? "" : (props.addr.secondAddress + ', ')) + props.addr.city + ', ' + props.addr.postcode;
   return <Paper
     sx={{
       p: 2,
@@ -79,5 +80,76 @@ export default function RestaurantInfo(props) {
 
       </Grid>
     </Grid>
+  </Paper>
+}
+
+export function RestaurantInfoChange(props) {
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+  }
+
+  return <Paper
+    sx={{
+      p: 2,
+      margin: 'auto',
+      flexGrow: 1,
+      backgroundColor: '#fff',
+    }}
+  >
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit}
+    >
+      <Grid container spacing={2}>
+        <Grid item xs container direction="column" spacing={2}>
+          <Grid item>
+            <Typography variant='body1'>
+              restaurant photo:
+            </Typography>
+            <Box sx={{ width: 400 }}>
+              <Img alt="complex" src={props.info.avatar} />
+            </Box>
+          </Grid>
+          <Grid item>
+            <Typography variant='body1'>
+              certification file:
+            </Typography>
+            <Box sx={{ width: 400 }}>
+              <Img alt="complex" src={props.info.avatar/* certificationFile */} />
+            </Box>
+          </Grid>
+        </Grid>
+        <Grid item xs container direction="column" spacing={2}>
+          <Grid item>
+            <TextField fullWidth id="name" label="name" variant="outlined" defaultValue={props.info.name} />
+          </Grid>
+          <Grid item>
+            <TextField fullWidth id="description" label="description" variant="outlined" defaultValue={props.info.description} />
+          </Grid>
+          <Grid item>
+            <TextField fullWidth id="phone" label="phone" variant="outlined" defaultValue={props.info.phone} />
+          </Grid>
+          <Grid item>
+            <TextField fullWidth id="firstAddress" label="firstAddress" variant="outlined" defaultValue={props.addr.firstAddress} />
+          </Grid>
+          <Grid item>
+            <TextField fullWidth id="secondAddress" label="secondAddress" variant="outlined" defaultValue={props.addr.secondAddress} />
+          </Grid>
+          <Grid item>
+            <TextField fullWidth id="city" label="city" variant="outlined" defaultValue={props.addr.city} />
+          </Grid>
+          <Grid item>
+            <TextField fullWidth id="postcode" label="postcode" variant="outlined" defaultValue={props.addr.postcode} />
+          </Grid>
+          <Grid item>
+            <Rating name="read-only" value={parseFloat(props.info.mark)} precision={0.1} readOnly />
+          </Grid>
+        </Grid>
+      </Grid>
+      <Button fullWidth type="submit" variant="contained">submit change</Button>
+    </Box>
   </Paper>
 }

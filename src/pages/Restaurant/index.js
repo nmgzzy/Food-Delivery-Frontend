@@ -40,7 +40,7 @@ export default function Restaurant() {
   const [basket, dispatch] = React.useReducer(reducer, initialBasket);
 
   React.useEffect(() => {
-    getRestaurantRequest(setRestaurant, setAddress, setMenu);
+    getRestaurantRequest(window.location.search, setRestaurant, setAddress, setMenu);
   }, [])
 
   return <div>

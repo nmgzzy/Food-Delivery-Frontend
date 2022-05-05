@@ -1,7 +1,6 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -22,7 +21,7 @@ export default function Home() {
 
   const handleAddrSubmit = (event) => {
     event.preventDefault();
-    //...
+    window.location.href = "/search";
   }
 
   const handleCategoryClick = (id) => {
@@ -100,9 +99,6 @@ export default function Home() {
                         {card.name}
                       </Typography>
                     </CardContent>
-                    {/* <CardActions>
-                      <Button size="small" onClick={handleCategoryClick}>View</Button>
-                    </CardActions> */}
                   </CardActionArea>
                 </Card>
               </Grid>
@@ -111,17 +107,6 @@ export default function Home() {
         </Container>
       </main>
       <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          Something here to give the footer a purpose!
-        </Typography>
         <Copyright />
       </Box>
     </div>

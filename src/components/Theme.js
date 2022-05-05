@@ -6,6 +6,9 @@ export const theme = createTheme({
     primary: {
       main: Colors.orange[200],
     },
+    secondary: {
+      main: Colors.blue[200],
+    },
     background: {
       paper: Colors.orange[50],
     },

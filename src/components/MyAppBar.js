@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
@@ -18,46 +16,8 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 import Button from '@mui/material/Button';
 import { UseUser } from './UserContext'
-
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 500,//'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '40ch',
-    },
-  },
-}));
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 
 export default function MyAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -84,6 +44,12 @@ export default function MyAppBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    window.location.href = '/search?keyword=' + data.get('search');
+  };
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -101,25 +67,41 @@ export default function MyAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={()=>{
+      <MenuItem onClick={() => {
         handleMenuClose();
         if (user.id === 0) {
           window.location.href = '/login';
         }
-        else{
-          window.location.href = '/profile';
+        else {
+          if (user.roleId === "ROLE_CUSTOMER") {
+            window.location.href = '/profile';
+          }
+          else if (user.roleId === "ROLE_RESTAURANT_OWNER") {
+            window.location.href = '/restaurantmanage';
+          }
+          else if (user.roleId === "ROLE_ADMIN") {
+            window.location.href = '/adminmanage';
+          }
         }
-        }}>Profile</MenuItem>
-      <MenuItem onClick={()=>{
+      }}>Profile</MenuItem>
+      <MenuItem onClick={() => {
         handleMenuClose();
         if (user.id === 0) {
           window.location.href = '/login';
         }
-        else{
-          window.location.href = '/order';
+        else {
+          if (user.roleId === "ROLE_CUSTOMER") {
+            window.location.href = '/order';
+          }
+          else if (user.roleId === "ROLE_RESTAURANT_OWNER") {
+            window.location.href = '/restaurantmanage';
+          }
+          else if (user.roleId === "ROLE_ADMIN") {
+            window.location.href = '/adminmanage';
+          }
         }
-        }}>My order</MenuItem>
-      <MenuItem onClick={()=>{handleMenuClose();logout();}}>Log out</MenuItem>
+      }}>My order</MenuItem>
+      <MenuItem onClick={() => { handleMenuClose(); logout(); }}>Log out</MenuItem>
     </Menu>
   );
 
@@ -198,7 +180,7 @@ export default function MyAppBar() {
               Food Delivery
             </Typography>
           </Button>
-          <Search>
+          {/* <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -206,7 +188,31 @@ export default function MyAppBar() {
               placeholder="Search restaurant or food name"
               inputProps={{ 'aria-label': 'search' }}
             />
-          </Search>
+            <Button variant='contained'>Search</Button>
+          </Search> */}
+          <Box
+            component="form"
+            noValidate
+            sx={{
+              maxWidth: '400px'
+            }}
+            onSubmit={handleSubmit}
+          >
+            <Stack
+              direction="row"
+              spacing={2}
+              display="flex"
+              sx={{
+                height: "40px",
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <SearchIcon />
+              <TextField id="search" name="search" label="search" variant="outlined" size='small' fullWidth/>
+              <Button type="submit" variant="contained">find</Button>
+            </Stack>
+          </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={1} color="error">

@@ -22,7 +22,19 @@ export function loginRequest(data, login, setOpen) {
         token: res.data.data.token
       });
       setTimeout(() => {
-        window.location.href = '/'
+        let r = res.data.data.userInfo.roleId;
+        if (r === 'ROLE_ADMIN') {
+          window.location.href = '/adminmanage'
+        }
+        else if (r === 'ROLE_CUSTOMER') {
+          window.location.href = '/'
+        }
+        else if (r === 'ROLE_RESTAURANT_OWNER') {
+          window.location.href = '/restaurantmanage'
+        }
+        else if (r === 'ROLE_DELIVERY_MAN'){
+          window.location.href = '/'
+        }
       }, 1000);
     }
     else {
@@ -105,14 +117,27 @@ export function SearchRequest(searchData, setRestaurants) {
   })
 }
 
-export function getRestaurantRequest(setRestaurant, setAddress, setMenu) {
+export function getRestaurantRequest(restaurantIdQuery, setRestaurant, setAddress, setMenu) {
   http({
     method: 'GET',
-    url: '/restaurant/getRestaurant' + window.location.search,
+    url: '/restaurant/getRestaurant' + restaurantIdQuery,
   }).then((res) => {
     setRestaurant(res.data.data.restaurant);
     setAddress(res.data.data.address);
     setMenu(res.data.data.menus);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function ownerGetRestaurantsRequest(userId, setRestaurant, setAddress, setMenu) {
+  http({
+    method: 'GET',
+    url: '/restaurant/ownerGetRestaurants?ownerId=' + userId + '&pageCurrent=1&pageSize=1',
+  }).then((res) => {
+    console.log(res);
+    var id = res.data.data.restaurants.records[0].id;
+    getRestaurantRequest("?restaurantId="+id, setRestaurant, setAddress, setMenu);
   }, (err) => {
     console.log(err);
   })
@@ -132,6 +157,61 @@ export function customerAddOrder(basketList, userId, addrId, restId) {
       menuIdQuantityMap: orderlist,
       restaurantId: restId
     }
+  }).then((res) => {
+    console.log(res);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function restaurantGetOrders(){
+  http({
+    method: 'GET',
+    url: '/order/restaurantGetOrders' + window.location.search,
+  }).then((res) => {
+    console.log(res);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function getOrderDetails(){
+  http({
+    method: 'GET',
+    url: '/order/getOrderDetails' + window.location.search,
+  }).then((res) => {
+    console.log(res);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function restaurantGetDeliveryMans(){
+  http({
+    method: 'GET',
+    url: '/order/getRestaurant' + window.location.search,
+  }).then((res) => {
+    console.log(res);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function restaurantSetDeliveryMan(orderId, name, phone){
+  http({
+    method: 'POST',
+    url: '/order/restaurantSetDeliveryMan?orderId=' + orderId + '&name=' + name + '&phone=' + phone,
+  }).then((res) => {
+    console.log(res);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function cancelOrder(){
+  http({
+    method: 'GET',
+    url: '/order/cancelOrder' + window.location.search,
   }).then((res) => {
     console.log(res);
   }, (err) => {

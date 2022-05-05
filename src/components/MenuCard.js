@@ -74,3 +74,63 @@ export default function MenuCard(props) {
     </Paper>
   </Grid>
 }
+
+export function MenuCardChange(props) {
+  const [num, setNum] = React.useState(0);
+  return <Grid item>
+    <Paper
+      sx={{
+        p: 2,
+        margin: '10px',
+        width: '100%',
+        flexGrow: 1,
+        backgroundColor: (theme) =>
+          theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+      }}
+    >
+      <Grid container spacing={2}>
+        <Grid item>
+          <Box sx={{ width: 128, height: 128 }}>
+            <Img alt="complex" src={props.item.photo} />
+          </Box>
+        </Grid>
+        <Grid item xs container direction="column">
+          <Grid item xs={12} sm container>
+            <Grid item xs container direction="column" spacing={2}>
+              <Grid item xs>
+                <Typography gutterBottom variant="subtitle1" component="div">
+                  {props.item.name}
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                  {props.item.description}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  ID: {props.item.id}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item >
+              <Typography variant="subtitle1" component="div">
+                £{props.item.price}
+              </Typography>
+            </Grid>
+          </Grid>
+          <Grid item display={'flex'} justifyContent={'flex-end'} alignItems={'center'}>
+            {/* <IconButton onClick={() => { if (num > 0) { setNum(num - 1) } }}><Icon fontSize='small'>remove_circle</Icon></IconButton>
+            <Typography variant="h6" width={"70px"} align={'center'}>
+              {num}
+            </Typography>
+            <IconButton onClick={() => { setNum(num + 1) }}><Icon fontSize='small'>add_circle</Icon></IconButton> */}
+            <Button
+              variant="contained"
+              sx={{ marginInline: '5px', height: '35px' }}
+              onClick={() => { /* todo */ }}
+            >
+              update
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Paper>
+  </Grid>
+}
