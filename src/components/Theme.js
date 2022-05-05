@@ -9,6 +9,9 @@ export const theme = createTheme({
     secondary: {
       main: Colors.blue[200],
     },
+    button: {
+      main: Colors.blue[800],
+    },
     background: {
       paper: Colors.orange[50],
     },

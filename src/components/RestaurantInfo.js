@@ -7,6 +7,7 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Rating from '@mui/material/Rating';
+import UploadPhoto from './UploadPhoto';
 
 const Img = styled('img')({
   margin: 'auto',
@@ -109,17 +110,23 @@ export function RestaurantInfoChange(props) {
             <Typography variant='body1'>
               restaurant photo:
             </Typography>
-            <Box sx={{ width: 400 }}>
-              <Img alt="complex" src={props.info.avatar} />
-            </Box>
+            <UploadPhoto
+              url={'restaurant/updateRestaurantAvatar?restaurantId=' + props.info.id}
+              defaultImage={props.info.avatar}
+              sx={{ maxWidth: 600, m: '10px' }}
+              alt='Avatar'
+            />
           </Grid>
           <Grid item>
             <Typography variant='body1'>
               certification file:
             </Typography>
-            <Box sx={{ width: 400 }}>
-              <Img alt="complex" src={props.info.avatar/* certificationFile */} />
-            </Box>
+            <UploadPhoto
+              url={'restaurant/updateRestaurantCertification?restaurantId=' + props.info.id}
+              defaultImage={props.info.certificationFile}
+              sx={{ maxWidth: 600, m: '10px' }}
+              alt='Certification'
+            />
           </Grid>
         </Grid>
         <Grid item xs container direction="column" spacing={2}>
@@ -140,6 +147,9 @@ export function RestaurantInfoChange(props) {
           </Grid>
           <Grid item>
             <TextField fullWidth id="city" label="city" variant="outlined" defaultValue={props.addr.city} />
+          </Grid>
+          <Grid item>
+            <TextField fullWidth id="country" label="country" variant="outlined" defaultValue={props.addr.country} />
           </Grid>
           <Grid item>
             <TextField fullWidth id="postcode" label="postcode" variant="outlined" defaultValue={props.addr.postcode} />

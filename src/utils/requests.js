@@ -143,7 +143,7 @@ export function ownerGetRestaurantsRequest(userId, setRestaurant, setAddress, se
   })
 }
 
-export function customerAddOrder(basketList, userId, addrId, restId) {
+export function customerAddOrderRequest(basketList, userId, addrId, restId) {
   var orderlist = {}
   for(var i = 0; i < basketList.length; i++) {
     orderlist[basketList[i].id] = basketList[i].num;
@@ -164,7 +164,7 @@ export function customerAddOrder(basketList, userId, addrId, restId) {
   })
 }
 
-export function restaurantGetOrders(){
+export function restaurantGetOrdersRequest(){
   http({
     method: 'GET',
     url: '/order/restaurantGetOrders' + window.location.search,
@@ -175,7 +175,7 @@ export function restaurantGetOrders(){
   })
 }
 
-export function getOrderDetails(){
+export function getOrderDetailsRequest(){
   http({
     method: 'GET',
     url: '/order/getOrderDetails' + window.location.search,
@@ -186,7 +186,7 @@ export function getOrderDetails(){
   })
 }
 
-export function restaurantGetDeliveryMans(){
+export function restaurantGetDeliveryMansRequest(){
   http({
     method: 'GET',
     url: '/order/getRestaurant' + window.location.search,
@@ -197,7 +197,7 @@ export function restaurantGetDeliveryMans(){
   })
 }
 
-export function restaurantSetDeliveryMan(orderId, name, phone){
+export function restaurantSetDeliveryManRequest(orderId, name, phone){
   http({
     method: 'POST',
     url: '/order/restaurantSetDeliveryMan?orderId=' + orderId + '&name=' + name + '&phone=' + phone,
@@ -208,10 +208,35 @@ export function restaurantSetDeliveryMan(orderId, name, phone){
   })
 }
 
-export function cancelOrder(){
+export function cancelOrderRequest(){
   http({
     method: 'GET',
     url: '/order/cancelOrder' + window.location.search,
+  }).then((res) => {
+    console.log(res);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function addMenuRequest(menuItem, callBack) {
+  http({
+    method: 'POST',
+    url: '/menu/addMenu',
+    data: menuItem
+  }).then((res) => {
+    console.log(res);
+    callBack();
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function updateMenuRequest(menuItem) {
+  http({
+    method: 'PUT',
+    url: '/menu/updateMenu',
+    data: menuItem
   }).then((res) => {
     console.log(res);
   }, (err) => {

@@ -8,7 +8,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { IconButton } from '@mui/material';
 import Icon from '@mui/material/Icon';
 import Avatar from '@mui/material/Avatar';
-import { customerAddOrder } from '../utils/requests'
+import { customerAddOrderRequest } from '../utils/requests'
 
 export default function Basket(props) {
   return <Paper elevation={3} sx={{
@@ -41,6 +41,6 @@ export default function Basket(props) {
         </ListItem>
       ))}
     </List>
-    <Button variant="contained" onClick={()=>{customerAddOrder(props.basket.list, 25, 161, props.restaurantId);}}>submit order</Button>
+    <Button variant="contained" onClick={()=>{customerAddOrderRequest(props.basket.list, 25, 161, props.restaurantId);}}>submit order</Button>
   </Paper >
 }

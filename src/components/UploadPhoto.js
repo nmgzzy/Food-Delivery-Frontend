@@ -1,7 +1,8 @@
-import React from 'react';
-import 'antd/dist/antd.css';
-import { Upload, message } from 'antd';
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import React from "react";
+import { Upload, message } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+import { UseUser } from "./UserContext";
+import { Typography, Box, Paper } from "@mui/material";
 
 function getBase64(img, callback) {
   const reader = new FileReader();
@@ -9,75 +10,61 @@ function getBase64(img, callback) {
   reader.readAsDataURL(img);
 }
 
-function beforeUpload(file) {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-  if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG file!');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 5;
-  if (!isLt2M) {
-    message.error('Image must smaller than 5MB!');
-  }
-  return isJpgOrPng && isLt2M;
-}
+export default function UploadPhoto(props) {
+  const { url, sx, defaultImage, alt } = props;
+  const { user } = UseUser();
+  const [ img, setImg ] = React.useState("");
 
-class UploadPhoto extends React.Component {
-  state = {
-    loading: false,
-  };
+  const beforeUpload = (file) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+      message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 5;
+    if (!isLt2M) {
+      message.error('Image must smaller than 5MB!');
+    }
+    return isJpgOrPng && isLt2M;
+  }
 
-  handleChange = info => {
-    if (info.file.status === 'uploading') {
-      this.setState({ loading: true });
-      return;
+  const handleChange = (info) => {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
     }
     if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl =>
-        this.setState({
-          imageUrl,
-          loading: false,
-        }),
-      );
+      getBase64(info.file.originFileObj, imageUrl => setImg(imageUrl));
+      message.success(`${info.file.name} file uploaded successfully`);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
     }
   };
 
-  render() {
-    const { loading, imageUrl } = this.state;
-    const uploadButton = (
-      <div>
-        {loading ? <LoadingOutlined /> : <PlusOutlined />}
-        <div style={{ marginTop: 8 }}>Upload</div>
-      </div>
-    );
-    return (
-      <Upload
-        name="avatar"
-        listType="picture-card"
-        className="avatar-uploader"
-        showUploadList={false}
-        action="https://fd.shimonzhan.com/api/restaurant/updateRestaurantAvatar"
-        // customRequest
-        // Allows for advanced customization by overriding default behavior in AjaxUploader. Provide your own XMLHttpRequest calls to interface with custom backend processes or interact with AWS S3 service through the aws-sdk-js package.
-
-        // customRequest callback is passed an object with:
-
-        // onProgress: (event: { percent: number }): void
-        // onError: (event: Error, body?: Object): void
-        // onSuccess: (body: Object): void
-        // data: Object
-        // filename: String
-        // file: File
-        // withCredentials: Boolean
-        // action: String
-        // headers: Object
-        beforeUpload={beforeUpload}
-        onChange={this.handleChange}
-      >
-        {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%', height: '100%' }} /> : uploadButton}
-      </Upload>
-    );
+  const picture = ()=>{
+    if (img === "" ) {
+      if (defaultImage) {
+        return <img src={defaultImage} alt={alt} style={{ width: '100%'}} />
+      }
+      return <div style={{height:100}}/>
+    }
+    return <img src={img} alt={alt} style={{ width: '100%'}} />
   }
-}
 
-export default UploadPhoto;
+  return (
+    <Paper sx={sx}>
+      <Upload
+        name="file"
+        method="PUT"
+        showUploadList={false}
+        action={'https://fd.shimonzhan.com/api/' + url}//restaurant/updateRestaurantAvatar?restaurantId=195
+        headers={{ Authorization: "Bearer " + user.token }}
+        beforeUpload={beforeUpload}
+        onChange={handleChange}
+      >
+        <Box style={{ padding: '20px', width:'100%'}}>
+          {picture()}
+          <Typography variant="body1" align="center"><UploadOutlined />{" "}Click to Upload{" "}<UploadOutlined /></Typography>
+        </Box>
+      </Upload>
+    </Paper>
+  )
+};

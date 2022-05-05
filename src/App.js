@@ -1,8 +1,6 @@
 import React from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-
 import { AppProviders } from "./components/AppProvider";
-
 import Dashboard from './pages/dashboard';
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -15,8 +13,6 @@ import RestaurantManage from "./pages/RestaurantManage";
 import Profile from "./pages/Profile";
 import Feedback from "./pages/Feedback";
 import AdminManage from "./pages/AdminManage";
-
-// import Trolley from "./Trolley";
 
 function App() {
   return (
