@@ -2,7 +2,7 @@ import React from 'react';
 import { logoutRequest } from '../utils/requests'
 
 var defaultUser = {
-  id: 0,
+  id: -1,
   username: "test",
   roleId: "ROLE_CUSTOMER",
   email: "",

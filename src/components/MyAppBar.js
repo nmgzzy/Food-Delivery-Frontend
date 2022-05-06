@@ -16,8 +16,8 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 import Button from '@mui/material/Button';
 import { UseUser } from './UserContext'
-import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
 
 export default function MyAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -69,7 +69,7 @@ export default function MyAppBar() {
     >
       <MenuItem onClick={() => {
         handleMenuClose();
-        if (user.id === 0) {
+        if (user.id === -1) {
           window.location.href = '/login';
         }
         else {
@@ -86,7 +86,7 @@ export default function MyAppBar() {
       }}>Profile</MenuItem>
       <MenuItem onClick={() => {
         handleMenuClose();
-        if (user.id === 0) {
+        if (user.id === -1) {
           window.location.href = '/login';
         }
         else {
@@ -194,24 +194,17 @@ export default function MyAppBar() {
             component="form"
             noValidate
             sx={{
-              maxWidth: '400px'
+              maxWidth: '600px'
             }}
             onSubmit={handleSubmit}
           >
-            <Stack
-              direction="row"
-              spacing={2}
-              display="flex"
-              sx={{
-                height: "40px",
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <SearchIcon />
-              <TextField id="search" name="search" label="search" variant="outlined" size='small' fullWidth/>
-              <Button type="submit" variant="contained">find</Button>
-            </Stack>
+            <TextField id="search" name="search" label="search" variant="outlined" size='small' fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>)
+              }} />
           </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
