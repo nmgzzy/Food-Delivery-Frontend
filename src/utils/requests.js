@@ -32,7 +32,7 @@ export function loginRequest(data, login, setOpen) {
         else if (r === 'ROLE_RESTAURANT_OWNER') {
           window.location.href = '/restaurantmanage'
         }
-        else if (r === 'ROLE_DELIVERY_MAN'){
+        else if (r === 'ROLE_DELIVERY_MAN') {
           window.location.href = '/'
         }
       }, 1000);
@@ -57,6 +57,10 @@ export function logoutRequest() {
 }
 
 export function signupRequest(data, role, setOpen) {
+  if (data.get('password') !== data.get('password2')) {
+    setOpen({ open: true, msg: "Password does not match", type: "warning" });
+    return;
+  }
   http({
     method: 'POST',
     url: '/user/register',
@@ -136,8 +140,10 @@ export function ownerGetRestaurantsRequest(userId, setRestaurant, setAddress, se
     url: '/restaurant/ownerGetRestaurants?ownerId=' + userId + '&pageCurrent=1&pageSize=1',
   }).then((res) => {
     console.log(res);
-    var id = res.data.data.restaurants.records[0].id;
-    getRestaurantRequest("?restaurantId="+id, setRestaurant, setAddress, setMenu);
+    if (res.data.data.restaurants.records[0]) {
+      var id = res.data.data.restaurants.records[0].id;
+      getRestaurantRequest("?restaurantId=" + id, setRestaurant, setAddress, setMenu);
+    }
   }, (err) => {
     console.log(err);
   })
@@ -145,7 +151,7 @@ export function ownerGetRestaurantsRequest(userId, setRestaurant, setAddress, se
 
 export function customerAddOrderRequest(basketList, userId, addrId, restId) {
   var orderlist = {}
-  for(var i = 0; i < basketList.length; i++) {
+  for (var i = 0; i < basketList.length; i++) {
     orderlist[basketList[i].id] = basketList[i].num;
   }
   http({
@@ -164,7 +170,7 @@ export function customerAddOrderRequest(basketList, userId, addrId, restId) {
   })
 }
 
-export function restaurantGetOrdersRequest(){
+export function restaurantGetOrdersRequest() {
   http({
     method: 'GET',
     url: '/order/restaurantGetOrders' + window.location.search,
@@ -175,7 +181,7 @@ export function restaurantGetOrdersRequest(){
   })
 }
 
-export function getOrderDetailsRequest(){
+export function getOrderDetailsRequest() {
   http({
     method: 'GET',
     url: '/order/getOrderDetails' + window.location.search,
@@ -186,7 +192,7 @@ export function getOrderDetailsRequest(){
   })
 }
 
-export function restaurantGetDeliveryMansRequest(){
+export function restaurantGetDeliveryMansRequest() {
   http({
     method: 'GET',
     url: '/order/getRestaurant' + window.location.search,
@@ -197,7 +203,7 @@ export function restaurantGetDeliveryMansRequest(){
   })
 }
 
-export function restaurantSetDeliveryManRequest(orderId, name, phone){
+export function restaurantSetDeliveryManRequest(orderId, name, phone) {
   http({
     method: 'POST',
     url: '/order/restaurantSetDeliveryMan?orderId=' + orderId + '&name=' + name + '&phone=' + phone,
@@ -208,7 +214,7 @@ export function restaurantSetDeliveryManRequest(orderId, name, phone){
   })
 }
 
-export function cancelOrderRequest(){
+export function cancelOrderRequest() {
   http({
     method: 'GET',
     url: '/order/cancelOrder' + window.location.search,
@@ -232,14 +238,60 @@ export function addMenuRequest(menuItem, callBack) {
   })
 }
 
-export function updateMenuRequest(menuItem) {
+export function updateMenuRequest(menuItem, setOpen) {
   http({
     method: 'PUT',
     url: '/menu/updateMenu',
     data: menuItem
   }).then((res) => {
-    console.log(res);
+    setOpen({open:true, msg:"Update Menu ok", type:"success"});
   }, (err) => {
     console.log(err);
   })
+}
+
+export function updateRestaurantAddressRequest(addr, restId) {
+  var addr1 = addr;
+  if (restId >= 0) {
+    addr1.restaurantId = restId;
+  }
+  var flag = 0;
+  http({
+    method: 'PUT',
+    url: '/restaurant/updateRestaurantAddress',
+    data: addr1
+  }).then((res) => {
+    flag = 1;
+  }, (err) => {
+    console.log(err);
+  })
+  return flag;
+}
+
+export function updateRestaurantInfoRequest(info, addr, setOpen) {
+  updateRestaurantAddressRequest(addr, -1);
+  http({
+    method: 'PUT',
+    url: '/restaurant/updateRestaurantInfo',
+    data: info
+  }).then((res) => {
+    setOpen({ open: true, msg: "Update Restaurant ok", type: "success" });
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function addRestaurantRequest(info, addr, setOpen) {
+  http({
+    method: 'POST',
+    url: '/restaurant/addRestaurant',
+    data: info
+  }).then((res) => {
+    if (updateRestaurantAddressRequest(addr, res.data.data.restaurantId) === 1) {
+      setOpen({ open: true, msg: "Add Restaurant ok", type: "success" });
+    }
+  }, (err) => {
+    console.log(err);
+  })
+
 }

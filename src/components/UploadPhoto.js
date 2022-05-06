@@ -1,5 +1,5 @@
 import React from "react";
-import { Upload, message } from "antd";
+import { Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { UseUser } from "./UserContext";
 import { Typography, Box, Paper } from "@mui/material";
@@ -11,18 +11,18 @@ function getBase64(img, callback) {
 }
 
 export default function UploadPhoto(props) {
-  const { url, sx, defaultImage, alt } = props;
+  const { url, sx, defaultImage, alt, setOpen } = props;
   const { user } = UseUser();
   const [ img, setImg ] = React.useState("");
 
   const beforeUpload = (file) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
+      setOpen({open:true, msg:"You can only upload JPG/PNG file!", type:"error"});
     }
     const isLt2M = file.size / 1024 / 1024 < 5;
     if (!isLt2M) {
-      message.error('Image must smaller than 5MB!');
+      setOpen({open:true, msg:"Image must smaller than 5MB!", type:"error"});
     }
     return isJpgOrPng && isLt2M;
   }
@@ -33,9 +33,9 @@ export default function UploadPhoto(props) {
     }
     if (info.file.status === 'done') {
       getBase64(info.file.originFileObj, imageUrl => setImg(imageUrl));
-      message.success(`${info.file.name} file uploaded successfully`);
+      setOpen({open:true, msg:`${info.file.name} file uploaded successfully`, type:"success"});
     } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} file upload failed.`);
+      setOpen({open:true, msg:`${info.file.name} file upload failed.`, type:"error"});
     }
   };
 

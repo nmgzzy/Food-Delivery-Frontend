@@ -78,28 +78,35 @@ export default function MenuCard(props) {
 }
 
 export function MenuCardChange(props) {
-  const { item, button, setCount } = props;
+  const { item, button, addCallback, setOpen, restaurantId } = props;
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    var menuItem = {
-      description: data.get("description"),
-      id: item.id,
-      name: data.get('name'),
-      price: data.get('price'),
-      restaurantId: "string",
-      status: item.status,
-      photo: item.photo
-    };
-    if (setCount) {
-      addMenuRequest(menuItem, ()=>{
-        setCount(parseInt(item.id)+1);
-      });
+    if(restaurantId >= 0) {
+      const data = new FormData(event.currentTarget);
+      var menuItem = {
+        description: data.get("description"),
+        id: item.id,
+        name: data.get('name'),
+        price: data.get('price'),
+        restaurantId: restaurantId,
+        status: item.status,
+        photo: item.photo
+      };
+      if (addCallback) {
+        addMenuRequest(menuItem, () => {
+          addCallback[1](addCallback[0] + 1);
+          setOpen({open:true, msg:"Update Menu ok", type:"success"});
+        });
+      }
+      else {
+        updateMenuRequest(menuItem);
+      }
     }
     else {
-      updateMenuRequest(menuItem);
+      setOpen({open:true, msg:"Create Restaurant Before Add Menu", type:"error"});
     }
+    
   };
 
   return <Grid item>
@@ -117,18 +124,12 @@ export function MenuCardChange(props) {
         noValidate
         onSubmit={handleSubmit}
       >
-        <Grid container spacing={2}>
-
-          <Grid item>
-            <UploadPhoto
-              url={'menu/updateMenuPhoto?menuId=' + item.id}
-              defaultImage={item.photo}
-              sx={{ maxWidth: 200, m: '10px' }}
-              alt='menu item'
-            />
-          </Grid>
-
-          <Grid item xs container direction="column" spacing={2}>
+        <Grid container spacing={6}>
+          <Grid item xs={8} container direction="column" spacing={2}>
+            step1:
+            <Typography variant="body2" color="text.secondary">
+              ID: {item.id}
+            </Typography>
             <Grid item xs>
               <TextField fullWidth id="name" name='name' label="name" variant="outlined" defaultValue={item.name} />
             </Grid>
@@ -136,25 +137,30 @@ export function MenuCardChange(props) {
               <TextField fullWidth id="description" name='description' label="description" variant="outlined" defaultValue={item.description} />
             </Grid>
             <Grid item xs>
-              <Typography variant="body2" color="text.secondary">
-                ID: {item.id}
-              </Typography>
+              <TextField fullWidth id="price" name='price' label="price" variant="outlined" defaultValue={item.price} />
+            </Grid>
+            <Grid item xs>
+              <Button
+                type='submit'
+                variant="contained"
+                sx={{ marginInline: '5px', height: '35px' }}
+              >
+                {button}
+              </Button>
             </Grid>
           </Grid>
-
-          <Grid item sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-            <TextField fullWidth id="price" name='price' label="price" variant="outlined" defaultValue={item.price} />
-            <Button
-              type='submit'
-              variant="contained"
-              sx={{ marginInline: '5px', height: '35px' }}
-            >
-              {button}
-            </Button>
+          <Grid item xs={4}>
+            step2:
+            <UploadPhoto
+              url={'menu/updateMenuPhoto?menuId=' + item.id}
+              defaultImage={item.photo}
+              sx={{ maxWidth: 300, m: '10px' }}
+              alt='menu item'
+              setOpen={ setOpen }
+            />
           </Grid>
-
         </Grid>
       </Box>
     </Paper>
-  </Grid>
+  </Grid >
 }

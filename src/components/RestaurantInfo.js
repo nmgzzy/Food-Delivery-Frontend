@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Rating from '@mui/material/Rating';
 import UploadPhoto from './UploadPhoto';
+import { updateRestaurantInfoRequest, addRestaurantRequest } from '../utils/requests'
 
 const Img = styled('img')({
   margin: 'auto',
@@ -85,10 +86,59 @@ export default function RestaurantInfo(props) {
 }
 
 export function RestaurantInfoChange(props) {
-
+  const { restaurant, addr, type, userid, addCallback, setOpen } = props;
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    const data = new FormData(event.currentTarget);
+    var addInfo = {
+      averageCookingTime: parseInt(data.get('averageCookingTime')),
+      categoryId: data.get('categoryId'),
+      description: data.get('description'),
+      name: data.get('name'),
+      ownerId: userid,
+      phone: data.get('phone')
+    };
+    var updateInfo = {
+      addressId: addr.id,
+      averageCookingTime: parseInt(data.get('averageCookingTime')),
+      categoryId: data.get('categoryId'),
+      description: data.get('description'),
+      id: restaurant.id,
+      name: data.get('name'),
+      ownerId: userid,
+      phone: data.get('phone'),
+      status: "OPEN"
+    };
+    var updateAddr = {
+      city: data.get('city'),
+      country: data.get('country'),
+      firstAddress: data.get('firstAddress'),
+      id: addr.id,
+      // latitude: 0,
+      // longitude: 0,
+      postcode: data.get('postcode'),
+      restaurantId: restaurant.id,
+      secondAddress: data.get('secondAddress'),
+      type: "RESTAURANT"
+    };
+    var addAddr = {
+      city: data.get('city'),
+      country: data.get('country'),
+      firstAddress: data.get('firstAddress'),
+      // latitude: 0,
+      // longitude: 0,
+      postcode: data.get('postcode'),
+      restaurantId: -1,
+      secondAddress: data.get('secondAddress'),
+      type: "RESTAURANT"
+    };
+    if (type === 'UPDATE') {
+      updateRestaurantInfoRequest(updateInfo, updateAddr, setOpen);
+    }
+    else if (type === 'ADD'){
+      addRestaurantRequest(addInfo, addAddr, setOpen);
+      addCallback[1](addCallback[0] + 1);
+    }
   }
 
   return <Paper
@@ -104,17 +154,55 @@ export function RestaurantInfoChange(props) {
       noValidate
       onSubmit={handleSubmit}
     >
-      <Grid container spacing={2}>
-        <Grid item xs container direction="column" spacing={2}>
+      <Grid container spacing={4}>
+        <Grid item xs={7} container direction="column" spacing={2}>
+          {type === 'ADD' ? 'step1:' : ''}
+          <Grid item>
+            <TextField fullWidth id="name" name='name' label="name" variant="outlined" defaultValue={restaurant.name} />
+          </Grid>
+          <Grid item>
+            <TextField fullWidth id="description" name='description' label="description" variant="outlined" defaultValue={restaurant.description} />
+          </Grid>
+          <Grid item>
+            <TextField fullWidth id="averageCookingTime" name='averageCookingTime' label="averageCookingTime" variant="outlined" defaultValue={restaurant.averageCookingTime} />
+          </Grid>
+          <Grid item>
+            <TextField fullWidth id="categoryId" name='categoryId' label="categoryId" variant="outlined" defaultValue={restaurant.categoryId} />
+          </Grid>
+          <Grid item>
+            <TextField fullWidth id="phone" name='phone' label="phone" variant="outlined" defaultValue={restaurant.phone} />
+          </Grid>
+          <Grid item>
+            <TextField fullWidth id="firstAddress" name='firstAddress' label="firstAddress" variant="outlined" defaultValue={addr.firstAddress} />
+          </Grid>
+          <Grid item>
+            <TextField fullWidth id="secondAddress" name='secondAddress' label="secondAddress" variant="outlined" defaultValue={addr.secondAddress} />
+          </Grid>
+          <Grid item>
+            <TextField fullWidth id="city" name='city' label="city" variant="outlined" defaultValue={addr.city} />
+          </Grid>
+          <Grid item>
+            <TextField fullWidth id="country" name='country' label="country" variant="outlined" defaultValue={addr.country} />
+          </Grid>
+          <Grid item>
+            <TextField fullWidth id="postcode" name='postcode' label="postcode" variant="outlined" defaultValue={addr.postcode} />
+          </Grid>
+          <Grid item>
+            <Button fullWidth type="submit" variant="contained">{type === 'UPDATE' ? 'submit change':'add restaurant infomation'}</Button>
+          </Grid>
+        </Grid>
+        <Grid item xs={5} container direction="column" spacing={2}>
+          {type === 'ADD' ? 'step2:' : ''}
           <Grid item>
             <Typography variant='body1'>
               restaurant photo:
             </Typography>
             <UploadPhoto
-              url={'restaurant/updateRestaurantAvatar?restaurantId=' + props.info.id}
-              defaultImage={props.info.avatar}
+              url={'restaurant/updateRestaurantAvatar?restaurantId=' + restaurant.id}
+              defaultImage={restaurant.avatar}
               sx={{ maxWidth: 600, m: '10px' }}
               alt='Avatar'
+              setOpen={setOpen}
             />
           </Grid>
           <Grid item>
@@ -122,44 +210,15 @@ export function RestaurantInfoChange(props) {
               certification file:
             </Typography>
             <UploadPhoto
-              url={'restaurant/updateRestaurantCertification?restaurantId=' + props.info.id}
-              defaultImage={props.info.certificationFile}
+              url={'restaurant/updateRestaurantCertification?restaurantId=' + restaurant.id}
+              defaultImage={restaurant.certificationFile}
               sx={{ maxWidth: 600, m: '10px' }}
               alt='Certification'
+              setOpen={setOpen}
             />
           </Grid>
         </Grid>
-        <Grid item xs container direction="column" spacing={2}>
-          <Grid item>
-            <TextField fullWidth id="name" label="name" variant="outlined" defaultValue={props.info.name} />
-          </Grid>
-          <Grid item>
-            <TextField fullWidth id="description" label="description" variant="outlined" defaultValue={props.info.description} />
-          </Grid>
-          <Grid item>
-            <TextField fullWidth id="phone" label="phone" variant="outlined" defaultValue={props.info.phone} />
-          </Grid>
-          <Grid item>
-            <TextField fullWidth id="firstAddress" label="firstAddress" variant="outlined" defaultValue={props.addr.firstAddress} />
-          </Grid>
-          <Grid item>
-            <TextField fullWidth id="secondAddress" label="secondAddress" variant="outlined" defaultValue={props.addr.secondAddress} />
-          </Grid>
-          <Grid item>
-            <TextField fullWidth id="city" label="city" variant="outlined" defaultValue={props.addr.city} />
-          </Grid>
-          <Grid item>
-            <TextField fullWidth id="country" label="country" variant="outlined" defaultValue={props.addr.country} />
-          </Grid>
-          <Grid item>
-            <TextField fullWidth id="postcode" label="postcode" variant="outlined" defaultValue={props.addr.postcode} />
-          </Grid>
-          <Grid item>
-            <Rating name="read-only" value={parseFloat(props.info.mark)} precision={0.1} readOnly />
-          </Grid>
-        </Grid>
       </Grid>
-      <Button fullWidth type="submit" variant="contained">submit change</Button>
     </Box>
   </Paper>
 }

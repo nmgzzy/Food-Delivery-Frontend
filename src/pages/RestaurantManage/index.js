@@ -13,6 +13,12 @@ import { getRestaurantRequest, ownerGetRestaurantsRequest } from '../../utils/re
 import { UseUser } from '../../components/UserContext'
 import { MenuCardChange } from '../../components/MenuCard'
 import { Typography } from '@mui/material';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -50,7 +56,7 @@ export default function RestaurantManage() {
   const theme    = useTheme();
   const { user } = UseUser();
   const [ value, setValue]            = React.useState(0);
-  const [ restaurant, setRestaurant ] = React.useState({});
+  const [ restaurant, setRestaurant ] = React.useState({id: -1});
   const [ address, setAddress ]       = React.useState({});
   const [ menu, setMenu ]             = React.useState([]);
   const [ count, setCount ]           = React.useState(0);
@@ -63,13 +69,23 @@ export default function RestaurantManage() {
     restaurantId: restaurant.id,
     status: "NORMAL"
   });
+  const [open, setOpen] = React.useState({open:false, msg:"", type:"success"});
 
   const didMountRef = React.useRef(false);
-
+  const type = React.useRef('ADD');
 
   React.useEffect(() => {
     ownerGetRestaurantsRequest(user.id, setRestaurant, setAddress, setMenu);
   }, [user]);
+
+  React.useEffect(() => {
+    if (restaurant.id >= 0) {
+      type.current = 'UPDATE';
+    }
+    else {
+      type.current = 'ADD';
+    }
+  }, [restaurant]);
 
   React.useEffect(() => {
     if (didMountRef.current) {
@@ -78,7 +94,7 @@ export default function RestaurantManage() {
     else {
       didMountRef.current = true;
     }
-  }, [count, restaurant]);
+  }, [count]);
 
   React.useEffect(() => {
     var maxId = 0
@@ -100,6 +116,13 @@ export default function RestaurantManage() {
     item.id = maxId;
     setNewItem(item);
   }, [menu, restaurant]);
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen({open:false, msg:open.msg, type:open.type});
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -127,19 +150,22 @@ export default function RestaurantManage() {
         orders
       </TabPanel>
       <TabPanel value={value} index={1} dir={theme.direction}>
-        <RestaurantInfoChange info={restaurant} addr={address} />
+        <RestaurantInfoChange restaurant={restaurant} addr={address} type={type.current} userid={user.id} addCallback={[count, setCount]} setOpen={setOpen}/>
       </TabPanel>
       <TabPanel value={value} index={2} dir={theme.direction}>
         <Grid container direction="column" spacing={2}>
           {menu.map((menuitem) => (
-            <MenuCardChange item={menuitem} key={menuitem.id} button='update' />
+            <MenuCardChange item={menuitem} key={menuitem.id} button={type.current} setOpen={setOpen}/>
           ))}
           <Grid item>
             <Typography variant='h5'>Add New Item:</Typography>
           </Grid>
-          <MenuCardChange item={newItem} key={newItem.id} button='add' setCount={setCount}/>
+          <MenuCardChange item={newItem} key={newItem.id} button={type.current} addCallback={[count, setCount]} setOpen={setOpen} restaurantId={restaurant.id}/>
         </Grid>
       </TabPanel>
     </Box>
+    <Snackbar open={open.open} onClose={handleClose} autoHideDuration={2000} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+      <Alert children={open.msg} onClose={handleClose} severity={open.type} sx={{ width: '100%' }}/>
+    </Snackbar>
   </div>);
 }

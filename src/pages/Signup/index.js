@@ -115,6 +115,17 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password2"
+                  label="Repeat Password"
+                  type="password"
+                  id="password2"
+                  autoComplete="new-password"
+                />
+              </Grid>
               <Button
                 type="submit"
                 fullWidth
