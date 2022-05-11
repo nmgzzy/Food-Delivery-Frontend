@@ -10,8 +10,8 @@ export default function Feedback() {
   return <div>
     <CssBaseline />
     <MyAppBar />
-    <Box sx={{display: 'flex', justifyContent:"center"}}>
-      <Card sx={{ width:700, mt:10}}>
+    <Box sx={{ display: 'flex', justifyContent: "center" }}>
+      <Card sx={{ width: 700, mt: 10 }}>
         <CardContent>
           <Typography variant="h4" component="div">
             {window.location.search.slice(1)}

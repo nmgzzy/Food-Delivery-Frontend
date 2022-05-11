@@ -9,13 +9,14 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { RestaurantInfoChange } from '../../components/RestaurantInfo'
-import { getRestaurantRequest, ownerGetRestaurantsRequest, restaurantGetOrdersRequest } from '../../utils/requests'
+import { getRestaurantRequest, ownerGetRestaurantsRequest, restaurantGetOrdersRequest, restaurantGetDeliveryMansRequest } from '../../utils/requests'
 import { UseUser } from '../../components/UserContext'
 import { MenuCardChange } from '../../components/MenuCard'
 import { OrderCard } from '../../components/OrderCard'
 import { Typography, Stack } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import Pagination from '@mui/material/Pagination';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -62,8 +63,11 @@ export default function RestaurantManage() {
   const [menu, setMenu] = React.useState([]);
   const [count, setCount] = React.useState(0);
   const [open, setOpen] = React.useState({ open: false, msg: "", type: "success" });
-  const [order, setOrder] = React.useState([]);
-  const [page, setPage] = React.useState(1);
+  const [order, setOrder] = React.useState({ records: [], current: 1, pages: 1 });
+  const [orderPage, setOrderPage] = React.useState(1);
+  const [deliveryman, setDeliveryman] = React.useState([]);
+  const [update, setUpdate] = React.useState(true);
+
   const [newItem, setNewItem] = React.useState({
     description: "",
     id: 0,
@@ -74,25 +78,34 @@ export default function RestaurantManage() {
     status: "NORMAL"
   });
   const didMountRef = React.useRef(false);
-  const updateRef = React.useRef(true);
   const type = React.useRef('ADD');
 
   React.useEffect(() => {
-    if(user.id !== -1) {
+    const timer = setInterval(() => {
+      //todo get order
+    }, 60000)
+    return () => {
+      clearInterval(timer)
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (user.id !== -1) {
       ownerGetRestaurantsRequest(user.id, setRestaurant, setAddress, setMenu);
+      restaurantGetDeliveryMansRequest(setDeliveryman);
     }
   }, [user]);
 
   React.useEffect(() => {
-    if (updateRef.current === true && restaurant.id !== -1) {
-      updateRef.current = false;
+    if (update && restaurant.id !== -1) {
+      setUpdate(false);
       restaurantGetOrdersRequest({
         restaurantId: restaurant.id,
-        // orderStatus: ['PENDING_DELIVERY', 'DELIVERING'],
-        pageCurrent: 1,
-      }, setOrder, setPage);
+        orderStatus: ['PENDING_DELIVERY', 'DELIVERING'],
+        pageCurrent: orderPage,
+      }, setOrder, setOrderPage);
     }
-  }, [restaurant.id]);
+  }, [restaurant.id, update, orderPage]);
 
   React.useEffect(() => {
     if (restaurant.id >= 0) {
@@ -164,10 +177,14 @@ export default function RestaurantManage() {
       </AppBar>
       <TabPanel value={value} index={0} dir={theme.direction}>
         <Stack spacing={2}>
-          {order.map((item) => (
-            <OrderCard order={item}/>
+          {order.records.map((item) => (
+            <OrderCard order={item} key={item.id} deliveryman={deliveryman} update={[update, setUpdate]} />
           ))}
         </Stack>
+        <Pagination count={order.pages} shape="rounded" size='large' page={order.current} onChange={(event, value) => {
+          setUpdate(true);
+          setOrderPage(value);
+        }} sx={{ mt: "30px" }} />
       </TabPanel>
       <TabPanel value={value} index={1} dir={theme.direction}>
         <RestaurantInfoChange restaurant={restaurant} addr={address} type={type.current} userid={user.id} addCallback={[count, setCount]} setOpen={setOpen} />

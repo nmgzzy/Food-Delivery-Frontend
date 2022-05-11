@@ -147,11 +147,27 @@ export function ownerGetRestaurantsRequest(userId, setRestaurant, setAddress, se
   })
 }
 
-export function customerAddOrderRequest(basketList, userId, addrId, restId) {
+export function customerPayOrderRequest(orderId) {
+  if (orderId === -1) {
+    console.log('orderId === -1');
+    return;
+  }
+  http({
+    method: 'POST',
+    url: '/order/customerPayOrder?orderId=' + orderId,
+  }).then((res) => {
+    console.log(res);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function customerAddOrderRequest(basketList, userId, addrId, restId, pay) {
   var orderlist = {}
   for (var i = 0; i < basketList.length; i++) {
     orderlist[basketList[i].id] = basketList[i].num;
   }
+  console.log('addrId'+addrId)
   http({
     method: 'POST',
     url: '/order/customerAddOrder',
@@ -162,25 +178,32 @@ export function customerAddOrderRequest(basketList, userId, addrId, restId) {
       restaurantId: restId
     }
   }).then((res) => {
-    console.log(res);
+    if (res.data.success === true && pay) {
+      customerPayOrderRequest(res.data.data.orderId);
+    }
   }, (err) => {
     console.log(err);
   })
 }
 
-export function restaurantGetOrdersRequest(data, setOrder, setPageNum) {
+export function restaurantGetOrdersRequest(data, setOrder) {
   const { restaurantId, orderStatus, pageCurrent } = data;
   var url = '/order/restaurantGetOrders?restaurantId=' + restaurantId;
-  if (orderStatus) {
-    url += '&orderStatus=' + orderStatus;
+  for (let i = 0; i < orderStatus.length; i++) {
+    url += '&orderStatuses=' + orderStatus[i];
   }
   url += '&pageCurrent=' + pageCurrent + '&pageSize=20';
   http({
     method: 'GET',
     url: url,
   }).then((res) => {
-    setOrder(res.data.data.orders.records);
-    setPageNum(res.data.data.orders.pages);
+    if (res.data.success) {
+      console.log(res.data.data.orders);
+      setOrder(res.data.data.orders);
+    }
+    else {
+      console.log("restaurantGetOrdersRequest error");
+    }
   }, (err) => {
     console.log(err);
   })
@@ -197,38 +220,40 @@ export function restaurantGetOrdersRequest(data, setOrder, setPageNum) {
 //   })
 // }
 
-// export function restaurantGetDeliveryMansRequest() {
-//   http({
-//     method: 'GET',
-//     url: '/order/restaurantGetDeliveryMans',
-//   }).then((res) => {
-//     console.log(res);
-//   }, (err) => {
-//     console.log(err);
-//   })
-// }
+export function restaurantGetDeliveryMansRequest(setDeliveryman) {
+  http({
+    method: 'GET',
+    url: '/order/restaurantGetDeliveryMans',
+  }).then((res) => {
+    // console.log(res.data.data.deliveryMans);
+    setDeliveryman(res.data.data.deliveryMans);
+  }, (err) => {
+    console.log(err);
+  })
+}
 
-// export function restaurantSetDeliveryManRequest(orderId, name, phone) {
-//   http({
-//     method: 'POST',
-//     url: '/order/restaurantSetDeliveryMan?orderId=' + orderId + '&name=' + name + '&phone=' + phone,
-//   }).then((res) => {
-//     console.log(res);
-//   }, (err) => {
-//     console.log(err);
-//   })
-// }
+export function restaurantSetDeliveryManRequest(orderId, name, phone, update) {
+  http({
+    method: 'POST',
+    url: '/order/restaurantSetDeliveryMan?orderId=' + orderId + '&name=' + name + '&phone=' + phone,
+  }).then((res) => {
+    console.log(res);
+    update(true);
+  }, (err) => {
+    console.log(err);
+  })
+}
 
-// export function cancelOrderRequest() {
-//   http({
-//     method: 'GET',
-//     url: '/order/cancelOrder',
-//   }).then((res) => {
-//     console.log(res);
-//   }, (err) => {
-//     console.log(err);
-//   })
-// }
+export function cancelOrderRequest(orderId) {
+  http({
+    method: 'GET',
+    url: '/order/cancelOrder?orderId=' + orderId,
+  }).then((res) => {
+    console.log(res);
+  }, (err) => {
+    console.log(err);
+  })
+}
 
 export function addMenuRequest(menuItem, callBack) {
   http({
@@ -248,7 +273,7 @@ export function updateMenuRequest(menuItem, setOpen) {
     url: '/menu/updateMenu',
     data: menuItem
   }).then((res) => {
-    setOpen({open:true, msg:"Update Menu ok", type:"success"});
+    setOpen({ open: true, msg: "Update Menu ok", type: "success" });
   }, (err) => {
     console.log(err);
   })
@@ -298,4 +323,37 @@ export function addRestaurantRequest(info, addr, setOpen) {
     console.log(err);
   })
 
+} 
+
+export function adminGetRestaurantsRequest(pageCurrent) {
+  var url = '/restaurant/adminGetRestaurants?restaurantStatus=UNVERIFIED';
+  url += '&pageCurrent=' + pageCurrent + '&pageSize=20';
+
+  http({
+    method: 'GET',
+    url: url,
+  }).then((res) => {
+    console.log(res);
+    // if (res.data.success) {
+    //   setOrder(res.data.data.orders.records);
+    //   setPageNum(res.data.data.orders.pages);
+    // }
+    // else{
+    //   console.log("restaurantGetOrdersRequest error");
+    // }
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function getCustomerAddressesRequest(customerId, setAddr) {
+  http({
+    method: 'GET',
+    url: '/address/getCustomerAddresses?customerId=' + customerId,
+  }).then((res) => {
+    console.log(res);
+    setAddr(res.data.data.addresses);
+  }, (err) => {
+    console.log(err);
+  })
 }

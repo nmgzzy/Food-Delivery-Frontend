@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 
 export function ImgMediaCard() {
     return (
-      <Card sx={{ maxWidth: 345 }}>
+      <Card>
         <CardMedia
           component="img"
           alt="green iguana"
@@ -36,7 +36,7 @@ export function ImgMediaCard() {
 
 export default function AdminManage() {
     React.useEffect(()=>{
-        
+      
     }, []);
     return <div>
         <CssBaseline />

@@ -13,6 +13,8 @@ import RestaurantManage from "./pages/RestaurantManage";
 import Profile from "./pages/Profile";
 import Feedback from "./pages/Feedback";
 import AdminManage from "./pages/AdminManage";
+import ChangePswd from "./pages/ChangePswd";
+import ForgetPswd from "./pages/ForgetPswd";
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/feedback" element={<Feedback />} />
             <Route path="/adminmanage" element={<AdminManage />} />
+            <Route path="/changepswd" element={<ChangePswd />} />
+            <Route path="/forgetpswd" element={<ForgetPswd />} />
           </Routes>
         </div>
       </AppProviders>

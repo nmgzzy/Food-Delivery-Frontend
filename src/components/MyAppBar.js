@@ -101,7 +101,15 @@ export default function MyAppBar() {
           }
         }
       }}>My order</MenuItem>
-      <MenuItem onClick={() => { handleMenuClose(); logout(); }}>Log out</MenuItem>
+      <MenuItem onClick={() => {
+        handleMenuClose();
+        if (user.id === -1) {
+          window.location.href = '/login';
+        }
+        else {
+          logout();
+        }
+      }}>{user.id === -1 ? "Log in" : "Log out"}</MenuItem>
     </Menu>
   );
 
@@ -152,7 +160,7 @@ export default function MyAppBar() {
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        <p>Me</p>
       </MenuItem>
     </Menu>
   );

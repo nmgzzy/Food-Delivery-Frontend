@@ -43,12 +43,12 @@ export default function RestaurantInfo(props) {
     }}
   >
     <Grid container spacing={2}>
-      <Grid item>
+      <Grid item xs={12} md={4}>
         <Box sx={{ height: 250 }}>
           <Img alt="complex" src={props.info.avatar} />
         </Box>
       </Grid>
-      <Grid item xs container direction="column">
+      <Grid item xs={12} md={5} container direction="column">
         <Grid item>
           <Typography variant='h3' p={'10px'}>
             {props.info.name}
@@ -73,7 +73,7 @@ export default function RestaurantInfo(props) {
           </Typography>
         </Grid>
       </Grid>
-      <Grid item>
+      <Grid item xs={12} md={3}>
         <Box sx={{ width: 300, height: 200 }}>
           {/* <Gmap/> */}
           map
