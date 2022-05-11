@@ -137,7 +137,7 @@ function BasicSelect(props) {
 }
 
 export function OrderCard(props) {
-  const { order, deliveryman, orderPage, update } = props;
+  const { order, deliveryman, update, msg } = props;
 
   const [expanded, setExpanded] = React.useState(false);
 
@@ -175,8 +175,15 @@ export function OrderCard(props) {
         </Grid>
       </CardContent>
       <CardActions disableSpacing>
-        <BasicSelect list={deliveryman} orderid={order.id} update={update}/>
-        <Button variant='contained' sx={{ ml: 3, mr: 1 }} onClick={() => { cancelOrderRequest(order.id); }}>cancel</Button>
+        <BasicSelect list={deliveryman} orderid={order.id} update={update} />
+        <Button
+          variant='contained'
+          sx={{ ml: 3, mr: 1 }}
+          onClick={() => {
+            cancelOrderRequest(order.id, msg, update[1]);
+          }}>
+          cancel
+        </Button>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}

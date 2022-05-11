@@ -178,7 +178,7 @@ export default function RestaurantManage() {
       <TabPanel value={value} index={0} dir={theme.direction}>
         <Stack spacing={2}>
           {order.records.map((item) => (
-            <OrderCard order={item} key={item.id} deliveryman={deliveryman} update={[update, setUpdate]} />
+            <OrderCard order={item} key={item.id} deliveryman={deliveryman} update={[update, setUpdate]} msg={setOpen}/>
           ))}
         </Stack>
         <Pagination count={order.pages} shape="rounded" size='large' page={order.current} onChange={(event, value) => {
@@ -192,12 +192,12 @@ export default function RestaurantManage() {
       <TabPanel value={value} index={2} dir={theme.direction}>
         <Grid container direction="column" spacing={2}>
           {menu.map((menuitem) => (
-            <MenuCardChange item={menuitem} key={menuitem.id} button={type.current} setOpen={setOpen} />
+            <MenuCardChange item={menuitem} key={menuitem.id} button={'Update'} setOpen={setOpen} />
           ))}
           <Grid item>
             <Typography variant='h5'>Add New Item:</Typography>
           </Grid>
-          <MenuCardChange item={newItem} key={newItem.id} button={type.current} addCallback={[count, setCount]} setOpen={setOpen} restaurantId={restaurant.id} />
+          <MenuCardChange item={newItem} key={newItem.id} button={'Add'} addCallback={[count, setCount]} setOpen={setOpen} restaurantId={restaurant.id} />
         </Grid>
       </TabPanel>
     </Box>

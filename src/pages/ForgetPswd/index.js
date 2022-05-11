@@ -8,34 +8,39 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Copyright from '../../components/Copyright';
-// import { loginRequest } from '../../utils/requests';
+import { changeForgetPasswordRequest } from '../../utils/requests';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import MyAppBar from '../../components/MyAppBar';
+import md5 from 'js-md5';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 export default function ForgetPswd() {
-  const [open, setOpen] = React.useState({open:false, msg:"", type:"success"});
+  const [open, setOpen] = React.useState({ open: false, msg: "", type: "success" });
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
-    setOpen({open:false, msg:open.msg, type:open.type});
+    setOpen({ open: false, msg: open.msg, type: open.type });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // const data = new FormData(event.currentTarget);
-    // loginRequest(data, login, setOpen);
+    const data = new FormData(event.currentTarget);
+    var a = data.get('password1');
+    var b = data.get('password2');
+    if (a === b) {
+      changeForgetPasswordRequest(md5(a));
+    }
   };
 
   return (
     <div>
-      <MyAppBar/>
+      <MyAppBar />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -87,7 +92,7 @@ export default function ForgetPswd() {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
         <Snackbar open={open.open} onClose={handleClose} autoHideDuration={2000} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-          <Alert children={open.msg} onClose={handleClose} severity={open.type} sx={{ width: '100%' }}/>
+          <Alert children={open.msg} onClose={handleClose} severity={open.type} sx={{ width: '100%' }} />
         </Snackbar>
       </Container>
     </div>

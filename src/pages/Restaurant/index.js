@@ -9,7 +9,6 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getRestaurantRequest, customerAddOrderRequest, getCustomerAddressesRequest } from '../../utils/requests';
 import { UseUser } from '../../components/UserContext';
@@ -130,7 +129,7 @@ export default function Restaurant() {
   React.useEffect(() => {
     getRestaurantRequest(window.location.search, setRestaurant, setAddress, setMenu);
     getCustomerAddressesRequest(user.id, setUserAddr);
-  }, []);
+  }, [user.id]);
 
   return <div>
     <CssBaseline />

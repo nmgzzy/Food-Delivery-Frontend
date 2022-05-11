@@ -12,19 +12,64 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Copyright from '../../components/Copyright';
-import { loginRequest } from '../../utils/requests';
+import { loginRequest, sendForgetPasswordMailRequest } from '../../utils/requests';
 import { UseUser } from '../../components/UserContext'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import MyAppBar from '../../components/MyAppBar';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
+export function ForgetDialog(props) {
+  const { openDialog, setOpenDialog } = props;
+  const email = React.useRef('');
+
+  const handleCloseNo = () => {
+    setOpenDialog(false);
+  };
+
+  const handleCloseYes = () => {
+    sendForgetPasswordMailRequest(email.current);
+    setOpenDialog(false);
+  };
+  
+  const handelChange = (event) => {
+    email.current = event.target.value;
+  };
+
+  return (
+    <div>
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseNo}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Input you Email:
+        </DialogTitle>
+        <DialogContent>
+          <TextField id="email" label="email" variant="outlined" onChange={handelChange}/>
+        </DialogContent>
+        <DialogActions>
+          <Button variant='contained' onClick={handleCloseNo}>Cancel</Button>
+          <Button variant='contained' onClick={handleCloseYes} autoFocus>Send Me Email</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
+
 export default function Login() {
   const { login } = UseUser();
   const [open, setOpen] = React.useState({open:false, msg:"", type:"success"});
+  const [openDialog, setOpenDialog] = React.useState(false);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -95,7 +140,7 @@ export default function Login() {
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="/" variant="body1" color="text.secondary">
+                <Link onClick={()=>{setOpenDialog(true);}} variant="body1" color="text.secondary">
                   Forgot password?
                 </Link>
               </Grid>
@@ -112,6 +157,7 @@ export default function Login() {
           <Alert children={open.msg} onClose={handleClose} severity={open.type} sx={{ width: '100%' }}/>
         </Snackbar>
       </Container>
+      <ForgetDialog openDialog={openDialog} setOpenDialog={setOpenDialog} />
     </div>
   );
 }

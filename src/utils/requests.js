@@ -156,7 +156,9 @@ export function customerPayOrderRequest(orderId) {
     method: 'POST',
     url: '/order/customerPayOrder?orderId=' + orderId,
   }).then((res) => {
-    console.log(res);
+    if (res.data.success === false) {
+      console.log("customerPayOrder error");
+    }
   }, (err) => {
     console.log(err);
   })
@@ -167,7 +169,7 @@ export function customerAddOrderRequest(basketList, userId, addrId, restId, pay)
   for (var i = 0; i < basketList.length; i++) {
     orderlist[basketList[i].id] = basketList[i].num;
   }
-  console.log('addrId'+addrId)
+  console.log('addrId' + addrId)
   http({
     method: 'POST',
     url: '/order/customerAddOrder',
@@ -225,7 +227,6 @@ export function restaurantGetDeliveryMansRequest(setDeliveryman) {
     method: 'GET',
     url: '/order/restaurantGetDeliveryMans',
   }).then((res) => {
-    // console.log(res.data.data.deliveryMans);
     setDeliveryman(res.data.data.deliveryMans);
   }, (err) => {
     console.log(err);
@@ -237,19 +238,21 @@ export function restaurantSetDeliveryManRequest(orderId, name, phone, update) {
     method: 'POST',
     url: '/order/restaurantSetDeliveryMan?orderId=' + orderId + '&name=' + name + '&phone=' + phone,
   }).then((res) => {
-    console.log(res);
     update(true);
   }, (err) => {
     console.log(err);
   })
 }
 
-export function cancelOrderRequest(orderId) {
+export function cancelOrderRequest(orderId, msg, update) {
   http({
     method: 'GET',
     url: '/order/cancelOrder?orderId=' + orderId,
   }).then((res) => {
-    console.log(res);
+    if (res.data.success) {
+      msg({ open: true, msg: 'Cancel Order Success!', type: 'success' });
+      update(true);
+    }
   }, (err) => {
     console.log(err);
   })
@@ -323,7 +326,7 @@ export function addRestaurantRequest(info, addr, setOpen) {
     console.log(err);
   })
 
-} 
+}
 
 export function adminGetRestaurantsRequest(pageCurrent) {
   var url = '/restaurant/adminGetRestaurants?restaurantStatus=UNVERIFIED';
@@ -351,8 +354,45 @@ export function getCustomerAddressesRequest(customerId, setAddr) {
     method: 'GET',
     url: '/address/getCustomerAddresses?customerId=' + customerId,
   }).then((res) => {
-    console.log(res);
     setAddr(res.data.data.addresses);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function changePasswordRequest(id, oldpw, newpw) {
+  http({
+    method: 'PUT',
+    url: '/user/changePassword?userId=' + id + '&oldPassword=' + oldpw + '&newPassword=' + newpw,
+  }).then((res) => {
+    console.log(res);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function changeForgetPasswordRequest(newpw) {
+  console.log('/user/changeForgetPassword' + window.location.search + '&newPassword=' + newpw);
+  http({
+    method: 'PUT',
+    url: '/user/changeForgetPassword' + window.location.search + '&newPassword=' + newpw,
+  }).then((res) => {
+    window.localStorage.setItem(
+      "test",
+      JSON.stringify(res)
+    );
+    console.log(res);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function sendForgetPasswordMailRequest(email) {
+  http({
+    method: 'GET',
+    url: '/user/sendForgetPasswordMail?email=' + email,
+  }).then((res) => {
+    console.log(res);
   }, (err) => {
     console.log(err);
   })
