@@ -23,6 +23,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { restaurantSetDeliveryManRequest, cancelOrderRequest } from '../utils/requests';
+import Gmap from '../components/Gmap';
 
 const Item = styled(Box)(({ theme }) => ({
   backgroundColor: '#fff',
@@ -42,33 +43,10 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const info = [
-  'status',
-  'beginTime',
-  'customerName',
-  'customerPhone',
-  'customerAddress',
-  'estimatedDeliveryTime',
-  'deliveredTime',
-  'deliveryManName',
-  'deliveryManPhone',
-]
-const show = [
-  'status:',
-  'begin time:',
-  'customerName',
-  'customerPhone',
-  'customerAddress',
-  'estimated delivery time:',
-  'delivered time:',
-  'deliveryman name:',
-  'deliveryman phone:',
-]
-
 function DenseTable(props) {
   const { data, total } = props;
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{backgroundColor:"#fff"}} >
       <Table sx={{ minWidth: 400 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
@@ -117,7 +95,7 @@ function BasicSelect(props) {
   };
 
   return (
-    <Box sx={{ minWidth: 200 }}>
+    <Box sx={{ minWidth: 200, backgroundColor: '#fff' }}>
       <FormControl fullWidth>
         <InputLabel id="deliveryman"> set delivery man</InputLabel>
         <Select
@@ -145,12 +123,125 @@ export function OrderCard(props) {
     setExpanded(!expanded);
   };
 
+  const info = [
+    'status',
+    'createTime',
+    'customerName',
+    'customerPhone',
+    'customerAddress',
+    'estimatedDeliveryTime',
+    'deliveredTime',
+    'deliveryManName',
+    'deliveryManPhone',
+  ];
+  const show = [
+    'status:',
+    'create time:',
+    'customer name:',
+    'customer phone:',
+    'customer address:',
+    'estimated delivery time:',
+    'delivered time:',
+    'deliveryman name:',
+    'deliveryman phone:',
+  ];
   const myorder = {
     'status': order.status,
-    'beginTime': order.beginTime,
+    'createTime': order.createTime,
     'customerName': order.customerAddress.firstName + order.customerAddress.lastName,
     'customerPhone': order.customerAddress.phone,
     'customerAddress': order.customerAddress.firstAddress + ', ' + order.customerAddress.postcode + ', ' + order.customerAddress.city,
+    'deliveredTime': order.deliveredTime,
+    'deliveryManName': order.deliveryManName,
+    'deliveryManPhone': order.deliveryManPhone,
+    'estimatedDeliveryTime': order.estimatedDeliveryTime,
+  };
+
+  return (<Item>
+    <Card sx={{ width: '100%' }}>
+      <CardHeader title={"Order " + order.id} />
+      <CardContent>
+        <Grid container spacing={3}>
+          {info.map((item, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index} container spacing={1}>
+              <Grid item xs={5}>
+                <Typography variant='body1' align='right' color={'#0000cf'}>{show[index]}</Typography>
+              </Grid>
+              <Grid item xs={7}>
+                <Typography variant='body1' align='left'>{myorder[item]}</Typography>
+              </Grid>
+            </Grid>
+          ))}
+        </Grid>
+      </CardContent>
+      <CardActions disableSpacing>
+        <BasicSelect list={deliveryman} orderid={order.id} update={update}/>
+        <Button
+          variant='contained'
+          sx={{ ml: 3, mr: 1 }}
+          onClick={() => {
+            cancelOrderRequest(order.id, msg, update[1]);
+          }}>
+          cancel order
+        </Button>
+        <ExpandMore
+          expand={expanded}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label="show more"
+        >
+          <ExpandMoreIcon sx={{ transform: !expanded ? 'rotate(0deg)' : 'rotate(180deg)' }} />
+          details
+        </ExpandMore>
+      </CardActions>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent>
+          <DenseTable data={order.orderItems} total={order.totalPrice} />
+        </CardContent>
+      </Collapse>
+    </Card>
+  </Item>
+  );
+}
+
+
+export function OrderCardForCustomer(props) {
+  const { order, update, msg } = props;
+
+  const [expanded, setExpanded] = React.useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
+  const info = [
+    'status',
+    'createTime',
+    'restaurantId',
+    'customerName',
+    'customerAddress',
+    'estimatedDeliveryTime',
+    'deliveredTime',
+    'deliveryManName',
+    'deliveryManPhone',
+  ];
+  const show = [
+    'status:',
+    'create time:',
+    'restaurant id:',
+    'customer name:',
+    'customer address:',
+    'estimated delivery time:',
+    'delivered time:',
+    'deliveryman name:',
+    'deliveryman phone:',
+  ];
+  const myorder = {
+    'status': order.status,
+    'createTime': order.createTime,
+    'restaurantId':order.restaurantId,
+    'customerName': order.customerAddress.firstName + order.customerAddress.lastName,
+    'customerAddress': order.customerAddress.firstAddress,
     'deliveredTime': order.deliveredTime,
     'deliveryManName': order.deliveryManName,
     'deliveryManPhone': order.deliveryManPhone,
@@ -165,7 +256,7 @@ export function OrderCard(props) {
           {info.map((item, index) => (
             <Grid item xs={12} sm={6} md={4} key={index} container spacing={1}>
               <Grid item xs={5}>
-                <Typography variant='body2' align='left'>{show[index]}</Typography>
+                <Typography variant='body1' align='right' color={'#0000cf'}>{show[index]}</Typography>
               </Grid>
               <Grid item xs={7}>
                 <Typography variant='body1' align='left'>{myorder[item]}</Typography>
@@ -175,14 +266,13 @@ export function OrderCard(props) {
         </Grid>
       </CardContent>
       <CardActions disableSpacing>
-        <BasicSelect list={deliveryman} orderid={order.id} update={update} />
         <Button
           variant='contained'
           sx={{ ml: 3, mr: 1 }}
           onClick={() => {
             cancelOrderRequest(order.id, msg, update[1]);
           }}>
-          cancel
+          cancel order
         </Button>
         <ExpandMore
           expand={expanded}
@@ -190,21 +280,26 @@ export function OrderCard(props) {
           aria-expanded={expanded}
           aria-label="show more"
         >
-          details
           <ExpandMoreIcon sx={{ transform: !expanded ? 'rotate(0deg)' : 'rotate(180deg)' }} />
+          details
         </ExpandMore>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <DenseTable data={order.orderItems} total={order.totalPrice} />
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={8}>
+              <DenseTable data={order.orderItems} total={order.totalPrice} />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Gmap lat={51.52} lng={-0.15} style={{ height: '30vh', width: '100%' }}/>
+            </Grid>
+          </Grid>
         </CardContent>
       </Collapse>
     </Card>
   </Item>
   );
 }
-
-
 
 
 

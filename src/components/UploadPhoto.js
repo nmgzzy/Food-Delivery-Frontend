@@ -60,7 +60,7 @@ export default function UploadPhoto(props) {
         beforeUpload={beforeUpload}
         onChange={handleChange}
       >
-        <Box style={{ padding: '20px', width:'100%'}}>
+        <Box style={{ padding: '20px', width:'100%'}} sx={{backgroundColor:"#fff"}}>
           {picture()}
           <Typography variant="body1" align="center"><UploadOutlined />{" "}Click to Upload{" "}<UploadOutlined /></Typography>
         </Box>

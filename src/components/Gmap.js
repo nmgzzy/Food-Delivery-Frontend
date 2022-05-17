@@ -1,35 +1,42 @@
-import React, { Component } from 'react';
-import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
+import React from 'react';
+import GoogleMapReact from 'google-map-react';
+import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 
-const mapStyles = {
-  width: 300,
-  height: 200
-};
+export default function SimpleMap(props){
+  const { lat, lng, style} = props;
+  var defaultProps = {
+    center: {
+      lat: lat,
+      lng: lng
+    },
+    zoom: 14
+  };
 
-export class Gmap extends Component {
-  render() {
-    return (
-      <Map
-        google={this.props.google}
-        zoom={15}
-        style={mapStyles}
-        initialCenter={
-          {
-            lat: 50.9107499,
-            lng: -1.4065178
-          }
-        }>
-        <Marker
-          name={'Dolores park'}
-          position={{lat: 50.9107499, lng: -1.4065178}} />
-      </Map>
-    );
-  }
+  return (
+    // Important! Always set the container height explicitly
+    // 
+    <div style={style}>
+      <GoogleMapReact
+        bootstrapURLKeys={{ key: "AIzaSyDfUft1in_hqA_k6NVMnxNAl0mfj-vD4mU" }}
+        defaultCenter={defaultProps.center}
+        defaultZoom={defaultProps.zoom}
+      >
+        <div
+          lat={defaultProps.center.lat}
+          lng={defaultProps.center.lng}
+        >
+          <DeliveryDiningIcon fontSize='large' color='icon'/>
+        </div>
+        <div
+          lat={defaultProps.center.lat}
+          lng={defaultProps.center.lng}
+        >
+          marker
+        </div>
+      </GoogleMapReact>
+    </div>
+  );
 }
- 
-export default GoogleApiWrapper({
-  apiKey: 'AIzaSyDfUft1in_hqA_k6NVMnxNAl0mfj-vD4mU'
-})(Gmap)
 
 export function getLocation() {
   var lat, lng;

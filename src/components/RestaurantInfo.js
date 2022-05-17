@@ -114,8 +114,6 @@ export function RestaurantInfoChange(props) {
       country: data.get('country'),
       firstAddress: data.get('firstAddress'),
       id: addr.id,
-      // latitude: 0,
-      // longitude: 0,
       postcode: data.get('postcode'),
       restaurantId: restaurant.id,
       secondAddress: data.get('secondAddress'),
@@ -125,8 +123,6 @@ export function RestaurantInfoChange(props) {
       city: data.get('city'),
       country: data.get('country'),
       firstAddress: data.get('firstAddress'),
-      // latitude: 0,
-      // longitude: 0,
       postcode: data.get('postcode'),
       restaurantId: -1,
       secondAddress: data.get('secondAddress'),
@@ -146,7 +142,6 @@ export function RestaurantInfoChange(props) {
       p: 2,
       margin: 'auto',
       flexGrow: 1,
-      backgroundColor: '#fff',
     }}
   >
     <Box
@@ -155,43 +150,48 @@ export function RestaurantInfoChange(props) {
       onSubmit={handleSubmit}
     >
       <Grid container spacing={4}>
-        <Grid item xs={7} container direction="column" spacing={2}>
+        <Grid item xs={12} sm={7} container direction="column" spacing={2}>
           {type === 'ADD' ? 'step1:' : ''}
           <Grid item>
-            <TextField fullWidth id="name" name='name' label="name" variant="outlined" defaultValue={restaurant.name} />
+            <TextField fullWidth id="name" name='name' label="name" variant="outlined" defaultValue={restaurant.name} sx={{backgroundColor:"#fff"}} />
           </Grid>
           <Grid item>
-            <TextField fullWidth id="description" name='description' label="description" variant="outlined" defaultValue={restaurant.description} />
+            <TextField fullWidth id="description" name='description' label="description" variant="outlined" defaultValue={restaurant.description} sx={{backgroundColor:"#fff"}} />
           </Grid>
           <Grid item>
-            <TextField fullWidth id="averageCookingTime" name='averageCookingTime' label="averageCookingTime" variant="outlined" defaultValue={restaurant.averageCookingTime} />
+            <TextField fullWidth id="averageCookingTime" name='averageCookingTime' label="averageCookingTime" variant="outlined" defaultValue={restaurant.averageCookingTime} sx={{backgroundColor:"#fff"}} />
           </Grid>
           <Grid item>
-            <TextField fullWidth id="categoryId" name='categoryId' label="categoryId" variant="outlined" defaultValue={restaurant.categoryId} />
+            <TextField fullWidth id="categoryId" name='categoryId' label="categoryId" variant="outlined" defaultValue={restaurant.categoryId} sx={{backgroundColor:"#fff"}} />
           </Grid>
           <Grid item>
-            <TextField fullWidth id="phone" name='phone' label="phone" variant="outlined" defaultValue={restaurant.phone} />
+            <TextField fullWidth id="phone" name='phone' label="phone" variant="outlined" defaultValue={restaurant.phone} sx={{backgroundColor:"#fff"}} />
           </Grid>
           <Grid item>
-            <TextField fullWidth id="firstAddress" name='firstAddress' label="firstAddress" variant="outlined" defaultValue={addr.firstAddress} />
+            <TextField fullWidth id="firstAddress" name='firstAddress' label="firstAddress" variant="outlined" defaultValue={addr.firstAddress} sx={{backgroundColor:"#fff"}} />
           </Grid>
           <Grid item>
-            <TextField fullWidth id="secondAddress" name='secondAddress' label="secondAddress" variant="outlined" defaultValue={addr.secondAddress} />
+            <TextField fullWidth id="secondAddress" name='secondAddress' label="secondAddress" variant="outlined" defaultValue={addr.secondAddress} sx={{backgroundColor:"#fff"}} />
           </Grid>
           <Grid item>
-            <TextField fullWidth id="city" name='city' label="city" variant="outlined" defaultValue={addr.city} />
+            <TextField fullWidth id="city" name='city' label="city" variant="outlined" defaultValue={addr.city} sx={{backgroundColor:"#fff"}} />
           </Grid>
           <Grid item>
-            <TextField fullWidth id="country" name='country' label="country" variant="outlined" defaultValue={addr.country} />
+            <TextField fullWidth id="country" name='country' label="country" variant="outlined" defaultValue={addr.country} sx={{backgroundColor:"#fff"}} />
           </Grid>
           <Grid item>
-            <TextField fullWidth id="postcode" name='postcode' label="postcode" variant="outlined" defaultValue={addr.postcode} />
+            <TextField fullWidth id="postcode" name='postcode' label="postcode" variant="outlined" defaultValue={addr.postcode} sx={{backgroundColor:"#fff"}} />
           </Grid>
           <Grid item>
             <Button fullWidth type="submit" variant="contained">{type === 'UPDATE' ? 'submit change':'add restaurant infomation'}</Button>
           </Grid>
+          <Grid item>
+            <Button fullWidth variant="contained" onClick={()=>{
+              window.location.href = '/changepswd';
+            }}>change password</Button>
+          </Grid>
         </Grid>
-        <Grid item xs={5} container direction="column" spacing={2}>
+        <Grid item xs={12} sm={5} container direction="column" spacing={2}>
           {type === 'ADD' ? 'step2:' : ''}
           <Grid item>
             <Typography variant='body1'>

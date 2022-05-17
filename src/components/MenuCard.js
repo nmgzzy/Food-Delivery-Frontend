@@ -116,7 +116,6 @@ export function MenuCardChange(props) {
         margin: '10px',
         width: '100%',
         flexGrow: 1,
-        backgroundColor: '#fff',
       }}
     >
       <Box
@@ -125,19 +124,19 @@ export function MenuCardChange(props) {
         onSubmit={handleSubmit}
       >
         <Grid container spacing={6}>
-          <Grid item xs={8} container direction="column" spacing={2}>
+          <Grid item xs={12} sm={8} container direction="column" spacing={2}>
             step1:
             <Typography variant="body2" color="text.secondary">
               ID: {item.id}
             </Typography>
             <Grid item xs>
-              <TextField fullWidth id="name" name='name' label="name" variant="outlined" defaultValue={item.name} />
+              <TextField fullWidth id="name" name='name' label="name" variant="outlined" defaultValue={item.name} sx={{backgroundColor:"#fff"}} />
             </Grid>
             <Grid item xs>
-              <TextField fullWidth id="description" name='description' label="description" variant="outlined" defaultValue={item.description} />
+              <TextField fullWidth id="description" name='description' label="description" variant="outlined" defaultValue={item.description} sx={{backgroundColor:"#fff"}} />
             </Grid>
             <Grid item xs>
-              <TextField fullWidth id="price" name='price' label="price" variant="outlined" defaultValue={item.price} />
+              <TextField fullWidth id="price" name='price' label="price" variant="outlined" defaultValue={item.price} sx={{backgroundColor:"#fff"}} />
             </Grid>
             <Grid item xs>
               <Button
@@ -149,7 +148,7 @@ export function MenuCardChange(props) {
               </Button>
             </Grid>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={12} sm={4}>
             step2:
             <UploadPhoto
               url={'menu/updateMenuPhoto?menuId=' + item.id}

@@ -12,8 +12,12 @@ export const theme = createTheme({
     button: {
       main: Colors.blue[800],
     },
+    icon: {
+      main: Colors.orange[900],
+    },
     background: {
       paper: Colors.orange[50],
+      white: '#fff',
     },
     text: {
       primary: '#000',
@@ -24,5 +28,6 @@ export const theme = createTheme({
       primary: Colors.orange[900],
       secondary: Colors.orange[800],
     }
+    
   },
 });

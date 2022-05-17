@@ -82,7 +82,7 @@ export default function RestaurantManage() {
 
   React.useEffect(() => {
     const timer = setInterval(() => {
-      //todo get order
+      setUpdate(true);
     }, 60000)
     return () => {
       clearInterval(timer)

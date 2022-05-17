@@ -28,7 +28,12 @@ export default function MyAppBar() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+    if (user.id === -1) {
+      window.location.href = '/login';
+    }
+    else {
+      setAnchorEl(event.currentTarget);
+    }
   };
 
   const handleMobileMenuClose = () => {
@@ -51,6 +56,27 @@ export default function MyAppBar() {
   };
 
   const menuId = 'primary-search-account-menu';
+  const MeneItemCustomer = (<div>
+    <MenuItem onClick={() => {
+      handleMenuClose();
+      window.location.href = '/profile';
+    }}>Profile</MenuItem>
+    <MenuItem onClick={() => {
+      handleMenuClose();
+      window.location.href = '/order';
+    }}>My order</MenuItem>
+  </div>);
+
+  const MeneItemOwner = (<MenuItem onClick={() => {
+    handleMenuClose();
+    window.location.href = '/restaurantmanage';
+  }}>Restaurant Manage</MenuItem>);
+
+  const MeneItemAdmin = (<MenuItem onClick={() => {
+    handleMenuClose();
+    window.location.href = '/adminmanage';
+  }}>Admin Manage</MenuItem>);
+
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -67,40 +93,11 @@ export default function MyAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={() => {
-        handleMenuClose();
-        if (user.id === -1) {
-          window.location.href = '/login';
-        }
-        else {
-          if (user.roleId === "ROLE_CUSTOMER") {
-            window.location.href = '/profile';
-          }
-          else if (user.roleId === "ROLE_RESTAURANT_OWNER") {
-            window.location.href = '/restaurantmanage';
-          }
-          else if (user.roleId === "ROLE_ADMIN") {
-            window.location.href = '/adminmanage';
-          }
-        }
-      }}>Profile</MenuItem>
-      <MenuItem onClick={() => {
-        handleMenuClose();
-        if (user.id === -1) {
-          window.location.href = '/login';
-        }
-        else {
-          if (user.roleId === "ROLE_CUSTOMER") {
-            window.location.href = '/order';
-          }
-          else if (user.roleId === "ROLE_RESTAURANT_OWNER") {
-            window.location.href = '/restaurantmanage';
-          }
-          else if (user.roleId === "ROLE_ADMIN") {
-            window.location.href = '/adminmanage';
-          }
-        }
-      }}>My order</MenuItem>
+      {
+        user.roleId === "ROLE_CUSTOMER" ? MeneItemCustomer :
+          user.roleId === "ROLE_RESTAURANT_OWNER" ? MeneItemOwner :
+            user.roleId === "ROLE_ADMIN" ? MeneItemAdmin : ""
+      }
       <MenuItem onClick={() => {
         handleMenuClose();
         if (user.id === -1) {

@@ -35,6 +35,12 @@ function reducer(state, action) {
       }
       return { list: state.list.filter((value, index1) => (index1 !== index)) };
     case 'append':
+      for (let i = 0; i < state.list.length; i++) {
+        if (action.id === state.list[i].id) {
+          state.list[i].num = action.num;
+          return { list: state.list };
+        }
+      }
       if (action.num > 0) {
         state.list.push({ id: action.id, name: action.name, photo: action.photo, num: action.num });
       }
@@ -59,7 +65,7 @@ export function PayDialog(props) {
     dispatch({ type: 'clear' });
     setOpenPay(false);
     // window.location.href = '/order';
-    // window.location.href = '/feedback?place an order success, please pay';
+    window.location.href = '/feedback?PlaceSuccess_PleasePay';
   };
 
   const handleCloseYes = () => {
@@ -67,7 +73,7 @@ export function PayDialog(props) {
     dispatch({ type: 'clear' });
     setOpenPay(false);
     // window.location.href = '/order';
-    // window.location.href = '/feedback?place and pay an order success';
+    window.location.href = '/feedback?Place&PaySuccess';
   };
 
   const handleRadioChange = (event) => {

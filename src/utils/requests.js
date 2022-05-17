@@ -169,7 +169,6 @@ export function customerAddOrderRequest(basketList, userId, addrId, restId, pay)
   for (var i = 0; i < basketList.length; i++) {
     orderlist[basketList[i].id] = basketList[i].num;
   }
-  console.log('addrId' + addrId)
   http({
     method: 'POST',
     url: '/order/customerAddOrder',
@@ -200,7 +199,6 @@ export function restaurantGetOrdersRequest(data, setOrder) {
     url: url,
   }).then((res) => {
     if (res.data.success) {
-      console.log(res.data.data.orders);
       setOrder(res.data.data.orders);
     }
     else {
@@ -210,17 +208,6 @@ export function restaurantGetOrdersRequest(data, setOrder) {
     console.log(err);
   })
 }
-
-// export function getOrderDetailsRequest() {
-//   http({
-//     method: 'GET',
-//     url: '/order/getOrderDetails',
-//   }).then((res) => {
-//     console.log(res);
-//   }, (err) => {
-//     console.log(err);
-//   })
-// }
 
 export function restaurantGetDeliveryMansRequest(setDeliveryman) {
   http({
@@ -365,7 +352,7 @@ export function changePasswordRequest(id, oldpw, newpw) {
     method: 'PUT',
     url: '/user/changePassword?userId=' + id + '&oldPassword=' + oldpw + '&newPassword=' + newpw,
   }).then((res) => {
-    console.log(res);
+    // console.log(res);
   }, (err) => {
     console.log(err);
   })
@@ -392,7 +379,88 @@ export function sendForgetPasswordMailRequest(email) {
     method: 'GET',
     url: '/user/sendForgetPasswordMail?email=' + email,
   }).then((res) => {
-    console.log(res);
+    // console.log(res);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function addCustomerAddressRequest(data, setUpdate) {
+  console.log(data);
+  http({
+    method: 'POST',
+    url: '/address/addCustomerAddress',
+    data: data
+  }).then((res) => {
+    setUpdate(true);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function removeCustomerAddressRequest(addressId, setUpdate) {
+  http({
+    method: 'DELETE',
+    url: '/address/removeCustomerAddress?addressId=' + addressId,
+  }).then((res) => {
+    setUpdate(true);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function updateCustomerAddressRequest(data, setUpdate) {
+  http({
+    method: 'PUT',
+    url: '/address/updateCustomerAddress',
+    data: data
+  }).then((res) => {
+    setUpdate(true);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function getUserInfoRequest(userId, setUserInfo) {
+  http({
+    method: 'GET',
+    url: '/user/getUserInfo?userId=' + userId,
+  }).then((res) => {
+    setUserInfo(res.data.data.userInfo);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function updateUserInfoRequest(data, setUpdate) {
+  http({
+    method: 'PUT',
+    url: '/user/updateUserInfo',
+    data: data
+  }).then((res) => {
+    setUpdate(true);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function customerGetOrdersRequest(data, setOrder) {
+  const { customerId, orderStatus, pageCurrent } = data;
+  var url = '/order/customerGetOrders?customerId=' + customerId;
+  for (let i = 0; i < orderStatus.length; i++) {
+    url += '&orderStatuses=' + orderStatus[i];
+  }
+  url += '&pageCurrent=' + pageCurrent + '&pageSize=20';
+  http({
+    method: 'GET',
+    url: url,
+  }).then((res) => {
+    if (res.data.success) {
+      setOrder(res.data.data.orders);
+    }
+    else {
+      console.log("restaurantGetOrdersRequest error");
+    }
   }, (err) => {
     console.log(err);
   })

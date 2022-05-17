@@ -1,101 +1,113 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-// import { IconButton } from '@mui/material';
-// import Icon from '@mui/material/Icon';
-// import Typography from '@mui/material/Typography';
-// import Grid from '@mui/material/Grid';
-// import Paper from '@mui/material/Paper';
-// import { styled } from '@mui/material/styles';
-// import TextField from '@mui/material/TextField';
-// import {  } from '../utils/requests'
-import { styled } from '@mui/material/styles';
+import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-// import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
-// import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-// import Typography from '@mui/material/Typography';
-// import { red } from '@mui/material/colors';
-// import FavoriteIcon from '@mui/icons-material/Favorite';
-// import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-// import MoreVertIcon from '@mui/icons-material/MoreVert';
-// import Paper from '@mui/material/Paper';
+import { TextField } from '@mui/material';
+import { addCustomerAddressRequest, removeCustomerAddressRequest, updateCustomerAddressRequest } from '../utils/requests';
 
-const Item = styled(Box)(({ theme }) => ({
-  backgroundColor: '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
+const addrKeys = [
+  "firstName",
+  "lastName",
+  "phone",
+  "firstAddress",
+  "secondAddress",
+  "city",
+  "country",
+  "postcode",
+]
 
-const ExpandMore = styled((props) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
+export default function AdminCard(props) {
+  const { customerId, type, address, setUpdate } = props;
+  const actionRef = React.useRef(0);
 
-export function OrderCard(props) {
-  const { order } = props;
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (actionRef.current <= 2) {
+      const form = new FormData(event.currentTarget);
+      var data = {
+        "customerId": customerId,
+        "city": form.get("city"),
+        "country": form.get("country"),
+        "firstAddress": form.get("firstAddress"),
+        "firstName": form.get("firstName"),
+        "lastName": form.get("lastName"),
+        "phone": form.get("phone"),
+        "postcode": form.get("postcode"),
+        "secondAddress": form.get("secondAddress")
+      }
+      if (type === 'UPDATE') {
+        data['id'] = address.id;
+        updateCustomerAddressRequest(data, setUpdate);
+      }
+      else {
+        addCustomerAddressRequest(data, setUpdate);
+      }
+    }
+    else if (actionRef.current === 3) {
+      removeCustomerAddressRequest(address.id, setUpdate);
+    }
+  }
 
-  const [expanded, setExpanded] = React.useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-// beginTime: null
-// customerAddressId: 57
-// customerId: 25
-// deliveredTime: null
-// deliveryManName: null
-// deliveryManPhone: null
-// estimatedDeliveryTime: null
-// id: 23
-// restaurantAddressId: 58
-// restaurantId: 197
-// status: "PENDING_PAYMENT"
-// totalPrice: 3
-
-  return (<Item>
-    <Card sx={{ width: '100%' }}>
-      <CardHeader title="title"/>
-      <CardContent>
-        正文
-      </CardContent>
-      <CardActions disableSpacing>
-        <Button variant='contained' sx={{ml:1, mr:1}}>cook finish</Button>
-        <Button variant='contained' sx={{ml:1, mr:1}}>cancel</Button>
-        {/* <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton> */}
-        <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          details
-          <ExpandMoreIcon sx={{transform: !expanded ? 'rotate(0deg)' : 'rotate(180deg)'}}/>
-        </ExpandMore>
-      </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+  return (
+    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ m: 3, textAlign: 'center' }}>
+      <Card sx={{ width: '100%' }}>
+        <CardHeader title={type === 'ADD' ? "Add New Address" : "Address"} />
         <CardContent>
-          展开内容
+          <Grid container rowSpacing={0} columnSpacing={3}>
+            {addrKeys.map((item) => (
+              <Grid item xs={12} sm={6} md={4} key={item}>
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  required
+                  id={item}
+                  label={item}
+                  name={item}
+                  defaultValue={type === 'UPDATE' ? address[item] : ''}
+                  autoComplete={item}
+                />
+              </Grid>
+            ))}
+          </Grid>
         </CardContent>
-      </Collapse>
-    </Card>
-    </Item>
+        <CardActions disableSpacing>
+          <Button
+            variant='contained'
+            type="submit"
+            disabled={type === 'UPDATE'}
+            sx={{ ml: 3, mr: 1 }}
+            onClick={() => {
+              actionRef.current = 1;
+            }}>
+            add
+          </Button>
+          <Button
+            variant='contained'
+            type="submit"
+            sx={{ ml: 3, mr: 1 }}
+            disabled={type === 'ADD'}
+            onClick={() => {
+              actionRef.current = 2;
+            }}>
+            update
+          </Button>
+          <Button
+            variant='contained'
+            type="submit"
+            disabled={type === 'ADD'}
+            sx={{ m: 3 }}
+            onClick={() => {
+              actionRef.current = 3;
+            }}>
+            delete
+          </Button>
+        </CardActions>
+      </Card>
+    </Box>
   );
 }
+
