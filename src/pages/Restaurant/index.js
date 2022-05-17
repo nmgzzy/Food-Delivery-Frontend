@@ -121,8 +121,6 @@ export function PayDialog(props) {
   );
 }
 
-
-
 export default function Restaurant() {
   const [restaurant, setRestaurant] = React.useState({});
   const [address, setAddress] = React.useState({});

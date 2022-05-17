@@ -135,15 +135,15 @@ export function OrderCard(props) {
     'deliveryManPhone',
   ];
   const show = [
-    'status:',
-    'create time:',
-    'customer name:',
-    'customer phone:',
-    'customer address:',
-    'estimated delivery time:',
-    'delivered time:',
-    'deliveryman name:',
-    'deliveryman phone:',
+    'Status:',
+    'Create time:',
+    'Customer name:',
+    'Customer phone:',
+    'Customer address:',
+    'Estimated delivery time:',
+    'Delivered time:',
+    'Deliveryman name:',
+    'Deliveryman phone:',
   ];
   const myorder = {
     'status': order.status,
@@ -204,7 +204,6 @@ export function OrderCard(props) {
   );
 }
 
-
 export function OrderCardForCustomer(props) {
   const { order, update, msg } = props;
 
@@ -217,7 +216,7 @@ export function OrderCardForCustomer(props) {
   const info = [
     'status',
     'createTime',
-    'restaurantId',
+    'restaurantName',
     'customerName',
     'customerAddress',
     'estimatedDeliveryTime',
@@ -226,20 +225,20 @@ export function OrderCardForCustomer(props) {
     'deliveryManPhone',
   ];
   const show = [
-    'status:',
-    'create time:',
-    'restaurant id:',
-    'customer name:',
-    'customer address:',
-    'estimated delivery time:',
-    'delivered time:',
-    'deliveryman name:',
-    'deliveryman phone:',
+    'Status:',
+    'Create time:',
+    'Restaurant name:',
+    'Customer name:',
+    'Customer address:',
+    'Estimated delivery time:',
+    'Delivered time:',
+    'Deliveryman name:',
+    'Deliveryman phone:',
   ];
   const myorder = {
     'status': order.status,
     'createTime': order.createTime,
-    'restaurantId':order.restaurantId,
+    'restaurantName':order.restaurantName,
     'customerName': order.customerAddress.firstName + order.customerAddress.lastName,
     'customerAddress': order.customerAddress.firstAddress,
     'deliveredTime': order.deliveredTime,
@@ -291,7 +290,7 @@ export function OrderCardForCustomer(props) {
               <DenseTable data={order.orderItems} total={order.totalPrice} />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Gmap lat={51.52} lng={-0.15} style={{ height: '30vh', width: '100%' }}/>
+              <Gmap lat={51.52} lng={-0.15} style={{ height: '30vh', width: '100%' }} who='dlvr'/>
             </Grid>
           </Grid>
         </CardContent>

@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import Rating from '@mui/material/Rating';
 import UploadPhoto from './UploadPhoto';
 import { updateRestaurantInfoRequest, addRestaurantRequest } from '../utils/requests'
+import Gmap from '../components/Gmap';
 
 const Img = styled('img')({
   margin: 'auto',
@@ -33,7 +34,8 @@ const Img = styled('img')({
 //   "longitude": -1.3948494
 // },
 export default function RestaurantInfo(props) {
-  const address = props.addr.firstAddress + ', ' + ((props.addr.secondAddress === "") ? "" : (props.addr.secondAddress + ', ')) + props.addr.city + ', ' + props.addr.postcode;
+  const {info, addr} = props;
+  const address = addr.firstAddress + ', ' + ((addr.secondAddress === "") ? "" : (addr.secondAddress + ', ')) + addr.city + ', ' + addr.postcode;
   return <Paper
     sx={{
       p: 2,
@@ -45,22 +47,22 @@ export default function RestaurantInfo(props) {
     <Grid container spacing={2}>
       <Grid item xs={12} md={4}>
         <Box sx={{ height: 250 }}>
-          <Img alt="complex" src={props.info.avatar} />
+          <Img alt="complex" src={info.avatar} />
         </Box>
       </Grid>
       <Grid item xs={12} md={5} container direction="column">
         <Grid item>
           <Typography variant='h3' p={'10px'}>
-            {props.info.name}
+            {info.name}
           </Typography>
         </Grid>
         <Grid item>
           <Typography variant='body1' p={'5px'}>
-            {props.info.description}
+            {info.description}
           </Typography> </Grid>
         <Grid item>
           <Typography variant='h5' p={'5px'}>
-            {props.info.phone}
+            {info.phone}
           </Typography> </Grid>
         <Grid item>
           <Typography variant='h5' p={'5px'}>
@@ -69,17 +71,13 @@ export default function RestaurantInfo(props) {
         </Grid>
         <Grid item>
           <Typography variant='h5' p={'5px'}>
-            <Rating name="read-only" value={parseFloat(props.info.mark)} precision={0.1} readOnly />
+            <Rating name="read-only" value={parseFloat(info.mark)} precision={0.1} readOnly />
           </Typography>
         </Grid>
       </Grid>
       <Grid item xs={12} md={3}>
-        <Box sx={{ width: 300, height: 200 }}>
-          {/* <Gmap/> */}
-          map
-        </Box>
-        <Typography variant='h5' p={'8px'}>time</Typography>
-
+        <Gmap lat={addr.latitude} lng={addr.longitude} style={{ height: '30vh', width: '100%' }} who='rest'/>
+        <Typography variant='h5' p={'8px'}>average cooking time: {info.averageCookingTime} min</Typography>
       </Grid>
     </Grid>
   </Paper>
