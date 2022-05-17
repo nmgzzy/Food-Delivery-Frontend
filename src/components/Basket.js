@@ -12,9 +12,7 @@ import Avatar from '@mui/material/Avatar';
 export default function Basket(props) {
   return <Paper elevation={3} sx={{
     p: 2,
-    margin: '10px',
-    flexGrow: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fafaff',
   }}>
     <Typography variant='h4' p={'10px'}>Basket</Typography>
     <List>

@@ -6,6 +6,7 @@ import RestaurantInfo from '../../components/RestaurantInfo'
 import MenuCard from '../../components/MenuCard'
 import Basket from '../../components/Basket'
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -139,16 +140,20 @@ export default function Restaurant() {
     <CssBaseline />
     <MyAppBar />
     <RestaurantInfo info={restaurant} addr={address} />
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={8} container>
-        {menu.map((menuitem) => (
-          <MenuCard item={menuitem} dispatch={dispatch} key={menuitem.id} />
-        ))}
+    <Box m='10px'>
+      <Grid container spacing={2}>
+        <Grid item xs={12} lg={8} container spacing={2}>
+          {menu.map((menuitem) => (
+            <Grid item xs={12} md={6} key={menuitem.id}>
+              <MenuCard item={menuitem} dispatch={dispatch} defaultImg={restaurant.avatar}/>
+            </Grid >
+          ))}
+        </Grid>
+        <Grid item xs={12} lg={4} >
+          <Basket basket={basket} dispatch={dispatch} menu={menu} restaurantId={restaurant.id} setOpenPay={setOpenPay} />
+        </Grid>
       </Grid>
-      <Grid item xs={12} md={4} >
-        <Basket basket={basket} dispatch={dispatch} menu={menu} restaurantId={restaurant.id} setOpenPay={setOpenPay} />
-      </Grid>
-    </Grid>
+    </Box>
     <PayDialog
       openPay={openPay}
       setOpenPay={setOpenPay}

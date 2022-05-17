@@ -20,8 +20,7 @@ export default function Order() {
   const [orderPage, setOrderPage] = React.useState(1);
   const [open, setOpen] = React.useState({ open: false, msg: "", type: "success" });
   const [update, setUpdate] = React.useState(true);
-
-
+  
   React.useEffect(()=>{
     const data = {
       customerId: user.id,
@@ -29,7 +28,7 @@ export default function Order() {
       pageCurrent: orderPage,
     }
     customerGetOrdersRequest(data, setOrders);
-  }, []);
+  }, [user.id, orderPage]);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {

@@ -44,11 +44,9 @@ export default function RestaurantInfo(props) {
       backgroundColor: '#fff',
     }}
   >
-    <Grid container spacing={2}>
+    <Grid container spacing={2} alignItems="center">
       <Grid item xs={12} md={4}>
-        <Box sx={{ height: 250 }}>
-          <Img alt="complex" src={info.avatar} />
-        </Box>
+        <Img alt="complex" src={info.avatar} />
       </Grid>
       <Grid item xs={12} md={5} container direction="column">
         <Grid item>
@@ -61,23 +59,23 @@ export default function RestaurantInfo(props) {
             {info.description}
           </Typography> </Grid>
         <Grid item>
-          <Typography variant='h5' p={'5px'}>
+          <Typography variant='h6' p={'5px'}>
             {info.phone}
           </Typography> </Grid>
         <Grid item>
-          <Typography variant='h5' p={'5px'}>
+          <Typography variant='h6' p={'5px'}>
             {address}
           </Typography>
         </Grid>
         <Grid item>
-          <Typography variant='h5' p={'5px'}>
-            <Rating name="read-only" value={parseFloat(info.mark)} precision={0.1} readOnly />
-          </Typography>
+          <Typography variant='body1' p={'8px'}>Average cooking time: {info.averageCookingTime} min</Typography>
+        </Grid>
+        <Grid item>
+          <Rating name="read-only" value={parseFloat(info.mark)} precision={0.1} readOnly />
         </Grid>
       </Grid>
       <Grid item xs={12} md={3}>
-        <Gmap lat={addr.latitude} lng={addr.longitude} style={{ height: '30vh', width: '100%' }} who='rest'/>
-        <Typography variant='h5' p={'8px'}>average cooking time: {info.averageCookingTime} min</Typography>
+        <Gmap lat={addr.latitude} lng={addr.longitude} style={{ height: '35vh', width: '100%' }} who='rest'/>
       </Grid>
     </Grid>
   </Paper>
