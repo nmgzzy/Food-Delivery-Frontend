@@ -45,6 +45,7 @@ export default function Address(props) {
       }
       else {
         addCustomerAddressRequest(data, setUpdate);
+        console.log(event.currentTarget)
       }
     }
     else if (actionRef.current === 3) {

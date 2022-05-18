@@ -79,7 +79,7 @@ export default function MenuCard(props) {
 }
 
 export function MenuCardChange(props) {
-  const { item, button, addCallback, setOpen, restaurantId } = props;
+  const { item, button, setUpdateRest, setOpen, restaurantId } = props;
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -94,10 +94,10 @@ export function MenuCardChange(props) {
         status: item.status,
         photo: item.photo
       };
-      if (addCallback) {
+      if (setUpdateRest) {
         addMenuRequest(menuItem, () => {
-          addCallback[1](addCallback[0] + 1);
           setOpen({ open: true, msg: "Update Menu ok", type: "success" });
+          setUpdateRest(true);
         });
       }
       else {

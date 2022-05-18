@@ -61,7 +61,7 @@ export default function RestaurantManage() {
   const [restaurant, setRestaurant] = React.useState({ id: -1 });
   const [address, setAddress] = React.useState({});
   const [menu, setMenu] = React.useState([]);
-  const [count, setCount] = React.useState(0);
+  const [updateRest, setUpdateRest] = React.useState(false);
   const [open, setOpen] = React.useState({ open: false, msg: "", type: "success" });
   const [order, setOrder] = React.useState({ records: [], current: 1, pages: 1 });
   const [orderPage, setOrderPage] = React.useState(1);
@@ -118,12 +118,15 @@ export default function RestaurantManage() {
 
   React.useEffect(() => {
     if (didMountRef.current) {
-      getRestaurantRequest("?restaurantId=" + restaurant.id, setRestaurant, setAddress, setMenu);
+      if (updateRest) {
+        setUpdateRest(false);
+        getRestaurantRequest("?restaurantId=" + restaurant.id, setRestaurant, setAddress, setMenu);
+      }
     }
     else {
       didMountRef.current = true;
     }
-  }, [count, restaurant.id]);
+  }, [updateRest, restaurant.id]);
 
   React.useEffect(() => {
     var maxId = 0
@@ -187,7 +190,7 @@ export default function RestaurantManage() {
         }} sx={{ mt: "30px" }} />
       </TabPanel>
       <TabPanel value={value} index={1} dir={theme.direction}>
-        <RestaurantInfoChange restaurant={restaurant} addr={address} type={type.current} userid={user.id} addCallback={[count, setCount]} setOpen={setOpen} />
+        <RestaurantInfoChange restaurant={restaurant} addr={address} type={type.current} userid={user.id} setUpdateRest={setUpdateRest} setOpen={setOpen} />
       </TabPanel>
       <TabPanel value={value} index={2} dir={theme.direction}>
         <Grid container direction="column" spacing={2}>
@@ -197,7 +200,7 @@ export default function RestaurantManage() {
           <Grid item>
             <Typography variant='h5'>Add New Item:</Typography>
           </Grid>
-          <MenuCardChange item={newItem} key={newItem.id} button={'Add'} addCallback={[count, setCount]} setOpen={setOpen} restaurantId={restaurant.id} />
+          <MenuCardChange item={newItem} key={newItem.id} button={'Add'} setUpdateRest={setUpdateRest} setOpen={setOpen} restaurantId={restaurant.id} />
         </Grid>
       </TabPanel>
     </Box>

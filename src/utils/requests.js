@@ -147,7 +147,7 @@ export function ownerGetRestaurantsRequest(userId, setRestaurant, setAddress, se
   })
 }
 
-export function customerPayOrderRequest(orderId) {
+export function customerPayOrderRequest(orderId, update, setOpen) {
   if (orderId === -1) {
     console.log('orderId === -1');
     return;
@@ -158,6 +158,14 @@ export function customerPayOrderRequest(orderId) {
   }).then((res) => {
     if (res.data.success === false) {
       console.log("customerPayOrder error");
+    }
+    else {
+      if (setOpen) {
+        setOpen({ open: true, msg: 'Pay Order Success!', type: 'success' });
+      }
+      if (update) {
+        update(true);
+      }
     }
   }, (err) => {
     console.log(err);
@@ -231,13 +239,13 @@ export function restaurantSetDeliveryManRequest(orderId, name, phone, update) {
   })
 }
 
-export function cancelOrderRequest(orderId, msg, update) {
+export function cancelOrderRequest(orderId, setOpen, update) {
   http({
     method: 'GET',
     url: '/order/cancelOrder?orderId=' + orderId,
   }).then((res) => {
     if (res.data.success) {
-      msg({ open: true, msg: 'Cancel Order Success!', type: 'success' });
+      setOpen({ open: true, msg: 'Cancel Order Success!', type: 'success' });
       update(true);
     }
   }, (err) => {
@@ -269,22 +277,21 @@ export function updateMenuRequest(menuItem, setOpen) {
   })
 }
 
-export function updateRestaurantAddressRequest(addr, restId) {
+export function updateRestaurantAddressRequest(addr, restId, setOpen, setUpdateRest) {
   var addr1 = addr;
   if (restId >= 0) {
     addr1.restaurantId = restId;
   }
-  var flag = 0;
   http({
     method: 'PUT',
     url: '/restaurant/updateRestaurantAddress',
     data: addr1
   }).then((res) => {
-    flag = 1;
+    setOpen({ open: true, msg: "Add Restaurant ok", type: "success" });
+    setUpdateRest(true);
   }, (err) => {
     console.log(err);
   })
-  return flag;
 }
 
 export function updateRestaurantInfoRequest(info, addr, setOpen) {
@@ -300,40 +307,17 @@ export function updateRestaurantInfoRequest(info, addr, setOpen) {
   })
 }
 
-export function addRestaurantRequest(info, addr, setOpen) {
+export function addRestaurantRequest(info, addr, setOpen, setUpdateRest) {
   http({
     method: 'POST',
     url: '/restaurant/addRestaurant',
     data: info
   }).then((res) => {
-    if (updateRestaurantAddressRequest(addr, res.data.data.restaurantId) === 1) {
-      setOpen({ open: true, msg: "Add Restaurant ok", type: "success" });
-    }
+    updateRestaurantAddressRequest(addr, res.data.data.restaurantId, setOpen, setUpdateRest);
   }, (err) => {
     console.log(err);
   })
 
-}
-
-export function adminGetRestaurantsRequest(pageCurrent) {
-  var url = '/restaurant/adminGetRestaurants?restaurantStatus=UNVERIFIED';
-  url += '&pageCurrent=' + pageCurrent + '&pageSize=20';
-
-  http({
-    method: 'GET',
-    url: url,
-  }).then((res) => {
-    console.log(res);
-    // if (res.data.success) {
-    //   setOrder(res.data.data.orders.records);
-    //   setPageNum(res.data.data.orders.pages);
-    // }
-    // else{
-    //   console.log("restaurantGetOrdersRequest error");
-    // }
-  }, (err) => {
-    console.log(err);
-  })
 }
 
 export function getCustomerAddressesRequest(customerId, setAddr) {
@@ -460,6 +444,40 @@ export function customerGetOrdersRequest(data, setOrder) {
     }
     else {
       console.log("restaurantGetOrdersRequest error");
+    }
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function adminGetRestaurantsRequest(pageCurrent, setRestaurants) {
+  var url = '/restaurant/adminGetRestaurants?restaurantStatus=UNVERIFIED';
+  url += '&pageCurrent=' + pageCurrent + '&pageSize=20';
+
+  http({
+    method: 'GET',
+    url: url,
+  }).then((res) => {
+    console.log(res.data.data.restaurants);
+    if (res.data.success) {
+      setRestaurants(res.data.data.restaurants);
+    }
+    else{
+      console.log("adminGetRestaurantsRequest error");
+    }
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function adminChangeRestaurantStatusRequest(restaurantId, restaurantStatus, callBack) {
+  http({
+    method: 'PUT',
+    url: '/restaurant/adminChangeRestaurantStatus?restaurantId=' + restaurantId + '&restaurantStatus=' + restaurantStatus,
+  }).then((res) => {
+    console.log(res);
+    if (callBack){
+      callBack();
     }
   }, (err) => {
     console.log(err);

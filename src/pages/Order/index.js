@@ -21,14 +21,17 @@ export default function Order() {
   const [open, setOpen] = React.useState({ open: false, msg: "", type: "success" });
   const [update, setUpdate] = React.useState(true);
   
-  React.useEffect(()=>{
-    const data = {
-      customerId: user.id,
-      orderStatus: ['PENDING_PAYMENT', 'PENDING_DELIVERY', 'DELIVERING'],
-      pageCurrent: orderPage,
+  React.useEffect(() => {
+    if (update) {
+      setUpdate(false);
+      const data = {
+        customerId: user.id,
+        orderStatus: ['PENDING_PAYMENT', 'PENDING_DELIVERY', 'DELIVERING'],
+        pageCurrent: orderPage,
+      }
+      customerGetOrdersRequest(data, setOrders);
     }
-    customerGetOrdersRequest(data, setOrders);
-  }, [user.id, orderPage]);
+  }, [user.id, orderPage, update]);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -43,7 +46,7 @@ export default function Order() {
       <MyAppBar />
       <Stack spacing={2}>
         {orders.records.map((item) => (
-          <OrderCardForCustomer order={item} key={item.id} update={[update, setUpdate]} msg={setOpen} />
+          <OrderCardForCustomer order={item} key={item.id} update={setUpdate} setOpen={setOpen} />
         ))}
       </Stack>
       <Pagination count={orders.pages} shape="rounded" size='large' page={orders.current} onChange={(event, value) => {

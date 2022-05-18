@@ -22,7 +22,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { restaurantSetDeliveryManRequest, cancelOrderRequest } from '../utils/requests';
+import { restaurantSetDeliveryManRequest, cancelOrderRequest, customerPayOrderRequest } from '../utils/requests';
 import Gmap from '../components/Gmap';
 
 const Item = styled(Box)(({ theme }) => ({
@@ -205,7 +205,7 @@ export function OrderCard(props) {
 }
 
 export function OrderCardForCustomer(props) {
-  const { order, update, msg } = props;
+  const { order, update, setOpen } = props;
 
   const [expanded, setExpanded] = React.useState(false);
 
@@ -267,9 +267,18 @@ export function OrderCardForCustomer(props) {
       <CardActions disableSpacing>
         <Button
           variant='contained'
+          disabled={order.status!=='PENDING_PAYMENT'}
           sx={{ ml: 3, mr: 1 }}
           onClick={() => {
-            cancelOrderRequest(order.id, msg, update[1]);
+            customerPayOrderRequest(order.id, update, setOpen);
+          }}>
+          Pay
+        </Button>
+        <Button
+          variant='contained'
+          sx={{ ml: 3, mr: 1 }}
+          onClick={() => {
+            cancelOrderRequest(order.id, setOpen, update);
           }}>
           cancel order
         </Button>

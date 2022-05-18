@@ -82,7 +82,7 @@ export default function RestaurantInfo(props) {
 }
 
 export function RestaurantInfoChange(props) {
-  const { restaurant, addr, type, userid, addCallback, setOpen } = props;
+  const { restaurant, addr, type, userid, setUpdateRest, setOpen } = props;
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -128,8 +128,7 @@ export function RestaurantInfoChange(props) {
       updateRestaurantInfoRequest(updateInfo, updateAddr, setOpen);
     }
     else if (type === 'ADD'){
-      addRestaurantRequest(addInfo, addAddr, setOpen);
-      addCallback[1](addCallback[0] + 1);
+      addRestaurantRequest(addInfo, addAddr, setOpen, setUpdateRest);
     }
   }
 

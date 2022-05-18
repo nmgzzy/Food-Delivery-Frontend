@@ -21,9 +21,6 @@ export default function CustomerInfo(props) {
     }
     updateUserInfoRequest(data, setUpdate);
   }
-  React.useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo])
 
   return <Card
     sx={{
