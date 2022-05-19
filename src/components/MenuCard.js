@@ -79,29 +79,33 @@ export default function MenuCard(props) {
 }
 
 export function MenuCardChange(props) {
-  const { item, button, setUpdateRest, setOpen, restaurantId } = props;
+  const { item, button, setUpdateRest, setOpen, restaurant } = props;
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (restaurantId >= 0) {
+    console.log(restaurant);
+    if (restaurant.id > 0) {
       const data = new FormData(event.currentTarget);
       var menuItem = {
         description: data.get("description"),
-        id: item.id,
         name: data.get('name'),
         price: data.get('price'),
-        restaurantId: restaurantId,
+        restaurantId: restaurant.id,
         status: item.status,
         photo: item.photo
       };
-      if (setUpdateRest) {
+      if (button === 'Add') {
         addMenuRequest(menuItem, () => {
-          setOpen({ open: true, msg: "Update Menu ok", type: "success" });
+          setOpen({ open: true, msg: "Add Menu ok", type: "success" });
           setUpdateRest(true);
         });
       }
       else {
-        updateMenuRequest(menuItem);
+        menuItem['id'] = item.id;
+        updateMenuRequest(menuItem, () => {
+          setOpen({ open: true, msg: "Update Menu ok", type: "success" });
+          setUpdateRest(true)
+        });
       }
     }
     else {
@@ -126,7 +130,7 @@ export function MenuCardChange(props) {
       >
         <Grid container spacing={6}>
           <Grid item xs={12} sm={8} container direction="column" spacing={2}>
-            step1:
+            {button === 'Add' ? 'step1:' : ''}
             <Typography variant="body2" color="text.secondary">
               ID: {item.id}
             </Typography>
@@ -150,7 +154,7 @@ export function MenuCardChange(props) {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4}>
-            step2:
+            {button === 'Add' ? 'step2:' : ''}
             <UploadPhoto
               url={'menu/updateMenuPhoto?menuId=' + item.id}
               defaultImage={item.photo}

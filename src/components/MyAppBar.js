@@ -18,14 +18,32 @@ import Button from '@mui/material/Button';
 import { UseUser } from './UserContext'
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
+import NoteDialog from './Notifications';
+import MsgDialog from './MyMessage'
+import { getMessagesRequest, getChatsRequest } from '../utils/requests';
 
 export default function MyAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const { user, logout } = UseUser();
 
+  const [openNote, setOpenNote] = React.useState(false);
+  const [notes, setNotes] = React.useState([]);
+  const [updateNote, setUpdateNote] = React.useState(true);
+
+  const [openMsg, setOpenMsg] = React.useState(false);
+  const [msgs, setMsgs] = React.useState([]);
+
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  React.useEffect(() => {
+    if (updateNote === true) {
+      setUpdateNote(false);
+      getMessagesRequest(user.id, setNotes);
+      getChatsRequest(user.id, setMsgs)
+    }
+  }, [user, updateNote])
 
   const handleProfileMenuOpen = (event) => {
     if (user.id === -1) {
@@ -127,21 +145,21 @@ export default function MyAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      <MenuItem onClick={() => { setOpenMsg(true); }}>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
+          <Badge badgeContent={msgs.length} color="error">
             <MailIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
       </MenuItem>
-      <MenuItem>
+      <MenuItem onClick={() => { setOpenNote(true); }}>
         <IconButton
           size="large"
           aria-label="show 17 new notifications"
           color="inherit"
         >
-          <Badge badgeContent={17} color="error">
+          <Badge badgeContent={notes.length} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -185,16 +203,6 @@ export default function MyAppBar() {
               Food Delivery
             </Typography>
           </Button>
-          {/* <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search restaurant or food name"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-            <Button variant='contained'>Search</Button>
-          </Search> */}
           <Box
             component="form"
             noValidate
@@ -212,8 +220,13 @@ export default function MyAppBar() {
               }} />
           </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={1} color="error">
+            <IconButton
+              size="large"
+              aria-label="show 4 new mails"
+              color="inherit"
+              onClick={() => { setOpenMsg(true); }}
+            >
+              <Badge badgeContent={msgs.length} color="error">
                 <MailIcon />
               </Badge>
             </IconButton>
@@ -221,8 +234,9 @@ export default function MyAppBar() {
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
+              onClick={() => { setOpenNote(true); }}
             >
-              <Badge badgeContent={2} color="error">
+              <Badge badgeContent={notes.length} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -254,6 +268,18 @@ export default function MyAppBar() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      <NoteDialog
+        open={openNote}
+        setOpen={setOpenNote}
+        notes={notes}
+        setUpdateNote={setUpdateNote}
+      />
+      <MsgDialog
+        open={openMsg}
+        setOpen={setOpenMsg}
+        msgs={msgs}
+        id={user.id}
+      />
     </Box>
   );
 }

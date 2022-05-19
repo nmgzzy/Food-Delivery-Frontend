@@ -7,8 +7,11 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Rating from '@mui/material/Rating';
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import UploadPhoto from './UploadPhoto';
-import { updateRestaurantInfoRequest, addRestaurantRequest } from '../utils/requests'
+import { updateRestaurantInfoRequest, addRestaurantRequest, getCategoriesRequest } from '../utils/requests'
 import Gmap from '../components/Gmap';
 
 const Img = styled('img')({
@@ -83,12 +86,23 @@ export default function RestaurantInfo(props) {
 
 export function RestaurantInfoChange(props) {
   const { restaurant, addr, type, userid, setUpdateRest, setOpen } = props;
+  const [cate, setCate] = React.useState([]);
+  const [selected, setSelected] = React.useState("");
+
+  React.useEffect(()=>{
+    getCategoriesRequest(setCate);
+  }, [])
+
+  const handleChange = (event) => {
+    setSelected(event.target.value);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     var addInfo = {
       averageCookingTime: parseInt(data.get('averageCookingTime')),
-      categoryId: data.get('categoryId'),
+      categoryId: selected,
       description: data.get('description'),
       name: data.get('name'),
       ownerId: userid,
@@ -97,7 +111,7 @@ export function RestaurantInfoChange(props) {
     var updateInfo = {
       addressId: addr.id,
       averageCookingTime: parseInt(data.get('averageCookingTime')),
-      categoryId: data.get('categoryId'),
+      categoryId: selected,
       description: data.get('description'),
       id: restaurant.id,
       name: data.get('name'),
@@ -148,6 +162,9 @@ export function RestaurantInfoChange(props) {
         <Grid item xs={12} sm={7} container direction="column" spacing={2}>
           {type === 'ADD' ? 'step1:' : ''}
           <Grid item>
+            <Typography variant="body1" ml={2}>{restaurant.id === -1 ? '' : 'id: '+restaurant.id}</Typography>
+          </Grid>
+          <Grid item>
             <TextField fullWidth id="name" name='name' label="name" variant="outlined" defaultValue={restaurant.name} sx={{backgroundColor:"#fff"}} />
           </Grid>
           <Grid item>
@@ -157,7 +174,22 @@ export function RestaurantInfoChange(props) {
             <TextField fullWidth id="averageCookingTime" name='averageCookingTime' label="averageCookingTime" variant="outlined" defaultValue={restaurant.averageCookingTime} sx={{backgroundColor:"#fff"}} />
           </Grid>
           <Grid item>
-            <TextField fullWidth id="categoryId" name='categoryId' label="categoryId" variant="outlined" defaultValue={restaurant.categoryId} sx={{backgroundColor:"#fff"}} />
+            <InputLabel id="categoryId">Category</InputLabel>
+            <Select
+              labelId="categoryId"
+              id="categoryId"
+              defaultValue={type === 'UPDATE'?restaurant.categoryId:''}
+              name={'categoryId'}
+              label="categoryId"
+              fullWidth
+              sx={{backgroundColor:"#fff"}}
+              onChange={handleChange}
+            >
+              {cate.map((item)=>(
+                <MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>
+              ))}
+            </Select>
+            {/* <TextField fullWidth id="categoryId" name='categoryId' label="categoryId" variant="outlined" defaultValue={restaurant.categoryId} sx={{backgroundColor:"#fff"}} /> */}
           </Grid>
           <Grid item>
             <TextField fullWidth id="phone" name='phone' label="phone" variant="outlined" defaultValue={restaurant.phone} sx={{backgroundColor:"#fff"}} />

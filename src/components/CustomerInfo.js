@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import UploadPhoto from './UploadPhoto';
 import { updateUserInfoRequest } from '../utils/requests'
-import { Card, CardContent, CardHeader } from '@mui/material';
+import { Card, CardContent, CardHeader, Typography } from '@mui/material';
 
 export default function CustomerInfo(props) {
   const { userInfo, setOpen, setUpdate } = props;
@@ -48,6 +48,9 @@ export default function CustomerInfo(props) {
             />
           </Grid>
           <Grid item xs={12} sm={8} container direction={'column'} spacing={2} m={1}>
+            <Grid item>
+              <Typography variant='h6' textAlign={'left'} ml={1}>id: {userInfo.id}</Typography>
+            </Grid>
             <Grid item>
               <TextField fullWidth id="email" name='email' label="email" variant="outlined" defaultValue={userInfo.email} sx={{ backgroundColor: "#fff" }} />
             </Grid>

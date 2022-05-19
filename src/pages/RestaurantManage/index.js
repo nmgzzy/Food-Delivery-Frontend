@@ -105,7 +105,7 @@ export default function RestaurantManage() {
         pageCurrent: orderPage,
       }, setOrder, setOrderPage);
     }
-  }, [restaurant.id, update, orderPage]);
+  }, [restaurant, update, orderPage]);
 
   React.useEffect(() => {
     if (restaurant.id >= 0) {
@@ -195,12 +195,12 @@ export default function RestaurantManage() {
       <TabPanel value={value} index={2} dir={theme.direction}>
         <Grid container direction="column" spacing={2}>
           {menu.map((menuitem) => (
-            <MenuCardChange item={menuitem} key={menuitem.id} button={'Update'} setOpen={setOpen} />
+            <MenuCardChange item={menuitem} key={menuitem.id} button={'Update'} setUpdateRest={setUpdateRest} setOpen={setOpen} restaurant={restaurant} />
           ))}
           <Grid item>
             <Typography variant='h5'>Add New Item:</Typography>
           </Grid>
-          <MenuCardChange item={newItem} key={newItem.id} button={'Add'} setUpdateRest={setUpdateRest} setOpen={setOpen} restaurantId={restaurant.id} />
+          <MenuCardChange item={newItem} key={newItem.id} button={'Add'} setUpdateRest={setUpdateRest} setOpen={setOpen} restaurant={restaurant} />
         </Grid>
       </TabPanel>
     </Box>

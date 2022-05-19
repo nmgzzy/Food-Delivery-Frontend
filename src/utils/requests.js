@@ -48,7 +48,7 @@ export function loginRequest(data, login, setOpen) {
 export function logoutRequest() {
   http({
     method: 'GET',
-    url: '/restaurant/getCategories',
+    url: '/user/logout',
   }).then((res) => {
   }, (err) => {
     console.log(err);
@@ -259,19 +259,21 @@ export function addMenuRequest(menuItem, callBack) {
     url: '/menu/addMenu',
     data: menuItem
   }).then((res) => {
-    callBack();
+    if(res.data.success===true){
+      callBack();
+    }
   }, (err) => {
     console.log(err);
   })
 }
 
-export function updateMenuRequest(menuItem, setOpen) {
+export function updateMenuRequest(menuItem, callBack) {
   http({
     method: 'PUT',
     url: '/menu/updateMenu',
     data: menuItem
   }).then((res) => {
-    setOpen({ open: true, msg: "Update Menu ok", type: "success" });
+    callBack();
   }, (err) => {
     console.log(err);
   })
@@ -462,7 +464,7 @@ export function adminGetRestaurantsRequest(pageCurrent, setRestaurants) {
     if (res.data.success) {
       setRestaurants(res.data.data.restaurants);
     }
-    else{
+    else {
       console.log("adminGetRestaurantsRequest error");
     }
   }, (err) => {
@@ -476,9 +478,55 @@ export function adminChangeRestaurantStatusRequest(restaurantId, restaurantStatu
     url: '/restaurant/adminChangeRestaurantStatus?restaurantId=' + restaurantId + '&restaurantStatus=' + restaurantStatus,
   }).then((res) => {
     console.log(res);
-    if (callBack){
+    if (callBack) {
       callBack();
     }
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function chatRequest(from, to, content) {
+  http({
+    method: 'POST',
+    url: '/message/chat?from=' + from + '&to=' + to + '&content=' + content,
+  }).then((res) => {
+    console.log(res);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function getChatsRequest(userId, setMsgs) {
+  http({
+    method: 'GET',
+    url: '/message/getChats?userId=' + userId,
+  }).then((res) => {
+    if (res.data.success === true) {
+      setMsgs(res.data.data.chats);
+    }
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function getMessagesRequest(userId, setNotes) {
+  http({
+    method: 'GET',
+    url: '/message/getMessages?userId=' + userId,
+  }).then((res) => {
+    setNotes(res.data.data.messages);
+  }, (err) => {
+    console.log(err);
+  })
+}
+
+export function readMessageRequest(messageId, setUpdateNote) {
+  http({
+    method: 'DELETE',
+    url: '/message/readMessage?messageId=' + messageId,
+  }).then((res) => {
+    setUpdateNote(true);
   }, (err) => {
     console.log(err);
   })

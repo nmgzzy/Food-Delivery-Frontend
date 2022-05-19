@@ -27,7 +27,7 @@ function AdminCard(props) {
   return (
     <Card>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={12} md={6}>
           <CardContent sx={{margin:'30px'}}>
             <Typography variant="h3">
               Name: {item.name}
@@ -36,18 +36,21 @@ function AdminCard(props) {
               Discription: {item.discription}
             </Typography>
             <Typography variant="h5">
-              Cook time: {item.phone}
+              Phone: {item.phone}
             </Typography>
             <Typography variant="h5">
-              Category: {item.category}
+              Cook time: {item.averageCookingTime}
             </Typography>
             <Typography variant="h5">
-              Address: {item.addressId}
+              Category: {item.categoryName}
+            </Typography>
+            <Typography variant="h5">
+              Address: {item.address.firstAddress+' '+ item.address.secondAddress+' '+item.address.city}
             </Typography>
           </CardContent>
         </Grid>
-        <Grid item xs={3}>
-          <Typography variant="h5" sx={{mt:2}}>
+        <Grid item xs={12} sm={6} md={3}>
+          <Typography variant="h5" sx={{mt:2, ml:2}}>
             Cover:
           </Typography>
           <CardMedia
@@ -57,8 +60,8 @@ function AdminCard(props) {
             image={item.avatar}
           />
         </Grid>
-        <Grid item xs={3}>
-          <Typography variant="h5" sx={{mt:2}}>
+        <Grid item xs={12} sm={6} md={3}>
+          <Typography variant="h5" sx={{mt:2, ml:2}}>
             Certificate file:
           </Typography>
           <CardMedia
