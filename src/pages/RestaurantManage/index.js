@@ -17,6 +17,8 @@ import { Typography, Stack } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Pagination from '@mui/material/Pagination';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -67,6 +69,7 @@ export default function RestaurantManage() {
   const [orderPage, setOrderPage] = React.useState(1);
   const [deliveryman, setDeliveryman] = React.useState([]);
   const [update, setUpdate] = React.useState(true);
+  const [status, setStatue] = React.useState({'PENDING_PAYMENT':false, 'PENDING_DELIVERY':true, 'DELIVERING':true, 'DELIVERED':false, 'CANCELLED':false});
 
   const [newItem, setNewItem] = React.useState({
     description: "",
@@ -99,13 +102,19 @@ export default function RestaurantManage() {
   React.useEffect(() => {
     if (update && restaurant.id !== -1) {
       setUpdate(false);
+      var orderStatus = [];
+      for(let key in status){
+        if (status[key]===true) {
+          orderStatus.push(key);
+        }
+      }
       restaurantGetOrdersRequest({
         restaurantId: restaurant.id,
-        orderStatus: ['PENDING_DELIVERY', 'DELIVERING'],
+        orderStatus: orderStatus,
         pageCurrent: orderPage,
       }, setOrder, setOrderPage);
     }
-  }, [restaurant, update, orderPage]);
+  }, [restaurant, status, update, orderPage]);
 
   React.useEffect(() => {
     if (restaurant.id >= 0) {
@@ -160,6 +169,13 @@ export default function RestaurantManage() {
     setValue(newValue);
   };
 
+  const handleChangeCheck = (event) => {
+    let a = status;
+    a[event.target.id] = event.target.checked;
+    setStatue(a);
+    setUpdate(true);
+  };
+
   return (<div>
     <CssBaseline />
     <MyAppBar />
@@ -179,6 +195,13 @@ export default function RestaurantManage() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} dir={theme.direction}>
+        <Box sx={{m:2}} display='flex' flexWrap='wrap' justifyContent='center'>
+          <FormControlLabel control={<Checkbox id='PENDING_PAYMENT' onChange={handleChangeCheck}/>} label="PENDING_PAYMENT" />
+          <FormControlLabel control={<Checkbox id='PENDING_DELIVERY' onChange={handleChangeCheck} defaultChecked/>} label="PENDING_DELIVERY" />
+          <FormControlLabel control={<Checkbox id='DELIVERING' onChange={handleChangeCheck} defaultChecked/>} label="DELIVERING" />
+          <FormControlLabel control={<Checkbox id='DELIVERED' onChange={handleChangeCheck}/>} label="DELIVERED" />
+          <FormControlLabel control={<Checkbox id='CANCELLED' onChange={handleChangeCheck}/>} label="CANCELLED" />
+        </Box>
         <Stack spacing={2}>
           {order.records.map((item) => (
             <OrderCard order={item} key={item.id} deliveryman={deliveryman} update={[update, setUpdate]} msg={setOpen}/>

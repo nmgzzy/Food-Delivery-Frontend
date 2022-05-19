@@ -17,7 +17,7 @@ export default function CustomerInfo(props) {
       id: userInfo.id,
       nickName: form.get('nickName'),
       roleId: userInfo.roleId,
-      username: form.get('username')
+      username: form.get('email')
     }
     updateUserInfoRequest(data, setUpdate);
   }
@@ -52,13 +52,19 @@ export default function CustomerInfo(props) {
               <Typography variant='h6' textAlign={'left'} ml={1}>id: {userInfo.id}</Typography>
             </Grid>
             <Grid item>
-              <TextField fullWidth id="email" name='email' label="email" variant="outlined" defaultValue={userInfo.email} sx={{ backgroundColor: "#fff" }} />
+              <Typography variant='h6' textAlign={'left'} ml={1}>email: {userInfo.email}</Typography>
             </Grid>
             <Grid item>
-              <TextField fullWidth id="username" name='username' label="username" variant="outlined" defaultValue={userInfo.username} sx={{ backgroundColor: "#fff" }} />
+              <Typography variant='h6' textAlign={'left'} ml={1}>nickName: {userInfo.nickName}</Typography>
             </Grid>
             <Grid item>
-              <TextField fullWidth id="nickName" name='nickName' label="nick name" variant="outlined" defaultValue={userInfo.nickName} sx={{ backgroundColor: "#fff" }} />
+              <TextField fullWidth id="email" name='email' label="email" variant="outlined" sx={{ backgroundColor: "#fff" }} />
+            </Grid>
+            {/* <Grid item>
+              <TextField fullWidth id="username" name='username' label="username" variant="outlined" sx={{ backgroundColor: "#fff" }} />
+            </Grid> */}
+            <Grid item>
+              <TextField fullWidth id="nickName" name='nickName' label="nick name" variant="outlined" sx={{ backgroundColor: "#fff" }} />
             </Grid>
             <Grid item>
               <Button variant='contained' type='submit' sx={{ m: 2 }}>update info</Button>

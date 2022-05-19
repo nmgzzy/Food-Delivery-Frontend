@@ -299,7 +299,10 @@ export function OrderCardForCustomer(props) {
               <DenseTable data={order.orderItems} total={order.totalPrice} />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Gmap lat={51.52} lng={-0.15} style={{ height: '30vh', width: '100%' }} who='dlvr'/>
+              <Gmap 
+              lat={(parseFloat(order.restaurantAddress.latitude)+parseFloat(order.customerAddress.latitude))/2.0} 
+              lng={(parseFloat(order.restaurantAddress.longitude)+parseFloat(order.customerAddress.longitude))/2.0} 
+              style={{ height: '30vh', width: '100%' }} who='dlvr'/>
             </Grid>
           </Grid>
         </CardContent>

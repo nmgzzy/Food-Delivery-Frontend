@@ -38,7 +38,7 @@ export default function MyAppBar() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   React.useEffect(() => {
-    if (updateNote === true) {
+    if (updateNote === true && user.id!==-1) {
       setUpdateNote(false);
       getMessagesRequest(user.id, setNotes);
       getChatsRequest(user.id, setMsgs)
