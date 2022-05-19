@@ -65,16 +65,16 @@ export function PayDialog(props) {
     customerAddOrderRequest(basket.list, userId, addrValue, restaurantId, false);
     dispatch({ type: 'clear' });
     setOpenPay(false);
-    // window.location.href = '/order';
-    window.location.href = '/feedback?PlaceSuccess_PleasePay';
+    window.location.href = '/order';
+    // window.location.href = '/feedback?PlaceSuccess_PleasePay';
   };
 
   const handleCloseYes = () => {
     customerAddOrderRequest(basket.list, userId, addrValue, restaurantId, true);
     dispatch({ type: 'clear' });
     setOpenPay(false);
-    // window.location.href = '/order';
-    window.location.href = '/feedback?Place&PaySuccess';
+    window.location.href = '/order';
+    // window.location.href = '/feedback?Place&PaySuccess';
   };
 
   const handleRadioChange = (event) => {
