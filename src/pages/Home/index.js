@@ -14,7 +14,6 @@ import Copyright from '../../components/Copyright';
 import { getCategoriesRequest } from '../../utils/requests'
 import MyAppBar from '../../components/MyAppBar';
 import { CardActionArea } from '@mui/material';
-//import { UseUser } from '../../components/UserContext'
 
 export default function Home() {
   const [categories, setCategories] = React.useState([]);
@@ -25,10 +24,9 @@ export default function Home() {
   }
 
   const handleCategoryClick = (id) => {
-    window.location.href = "/search?categoryId="+id;
+    window.location.href = "/search?categoryId=" + id;
   }
 
-  //const { user } = UseUser()
   React.useEffect(() => {
     getCategoriesRequest(setCategories);
   }, []);
@@ -73,18 +71,14 @@ export default function Home() {
                 <TextField id="Postcode" label="Postcode" variant="outlined" />
                 <Button type="submit" variant="contained">find</Button>
               </Stack>
-
             </Box>
-
           </Container>
         </Box>
         <Container sx={{ py: 8 }} maxWidth="md">
           <Grid container spacing={2}>
             {categories.map((card) => (
               <Grid item key={card.id} xs={12} sm={6} md={4}>
-                <Card
-                  sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-                >
+                <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }} >
                   <CardActionArea onClick={(event) => {
                     event.preventDefault();
                     handleCategoryClick(card.id);

@@ -277,6 +277,7 @@ export function OrderCardForCustomer(props) {
         <Button
           variant='contained'
           sx={{ ml: 3, mr: 1 }}
+          disabled={order.status==='DELIVERED' || order.status==='CANCELLED'}
           onClick={() => {
             cancelOrderRequest(order.id, setOpen, update);
           }}>

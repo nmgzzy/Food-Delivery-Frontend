@@ -16,26 +16,26 @@ import AdminManage from "./pages/AdminManage";
 import ChangePswd from "./pages/ChangePswd";
 import ForgetPswd from "./pages/ForgetPswd";
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
       <AppProviders>
         <div className="App">
           <Routes>
-            <Route exact path="/" element={<Home />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/order" element={<Order />} />
-            <Route path="/activate" element={<Activate />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/search" element={<Search />} />
+            <Route exact path="/"           element={<Home />} />
+            <Route path="/signup"           element={<SignUp />} />
+            <Route path="/login"            element={<Login />} />
+            <Route path="/activate"         element={<Activate />} />
+            <Route path="/changepswd"       element={<ChangePswd />} />
+            <Route path="/forgetpswd"       element={<ForgetPswd />} />
+            <Route path="/profile"          element={<Profile />} />
+            <Route path="/order"            element={<Order />} />
+            <Route path="/search"           element={<Search />} />
+            <Route path="/restaurant"       element={<Restaurant />} />
             <Route path="/restaurantmanage" element={<RestaurantManage />} />
-            <Route path="/restaurant" element={<Restaurant />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/feedback" element={<Feedback />} />
-            <Route path="/adminmanage" element={<AdminManage />} />
-            <Route path="/changepswd" element={<ChangePswd />} />
-            <Route path="/forgetpswd" element={<ForgetPswd />} />
+            <Route path="/adminmanage"      element={<AdminManage />} />
+            <Route path="/dashboard"        element={<Dashboard />} />
+            <Route path="/feedback"         element={<Feedback />} />
           </Routes>
         </div>
       </AppProviders>
@@ -43,4 +43,3 @@ function App() {
   );
 }
 
-export default App;

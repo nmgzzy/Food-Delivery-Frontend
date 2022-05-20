@@ -27,7 +27,7 @@ export function loginRequest(data, login, setOpen) {
           window.location.href = '/adminmanage'
         }
         else if (r === 'ROLE_CUSTOMER') {
-          window.location.href = '/'
+          window.history.back(-1);
         }
         else if (r === 'ROLE_RESTAURANT_OWNER') {
           window.location.href = '/restaurantmanage'
