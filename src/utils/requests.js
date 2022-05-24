@@ -167,6 +167,7 @@ export function customerPayOrderRequest(orderId, update, setOpen) {
         update(true);
       }
     }
+    window.location.href = '/order';
   }, (err) => {
     console.log(err);
   })
@@ -190,6 +191,7 @@ export function customerAddOrderRequest(basketList, userId, addrId, restId, pay)
     if (res.data.success === true && pay) {
       customerPayOrderRequest(res.data.data.orderId);
     }
+    window.location.href = '/order';
   }, (err) => {
     console.log(err);
   })
