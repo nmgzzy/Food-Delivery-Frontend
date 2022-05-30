@@ -1,6 +1,3 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
 name: Node.js CI
 
 on:
@@ -14,17 +11,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
+    - uses: actions/checkout@v3
+
+    - uses: actions/cache@v3
+      id: node-modules
       with:
-        node-version: '16'
-    - run: yarn install
+        path: node_modules/
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-node-modules-
+
+    - name: Install Deps
+      if: steps.node-modules.outputs.cache-hit != 'true'
+      run: yarn install --frozen-lockfile
+        
     - run: yarn run build
       env:
            CI: false
@@ -33,16 +34,15 @@ jobs:
       uses: garygrossgarten/github-action-scp@release
       with:
         local: build/
-        remote: /root/fd-build/
-        host: 34.89.11.237
+        remote: /root/fd/front-build/
+        host: 121.5.142.169
         username: root
         password: ${{secrets.PSWD}}
     - name: restart nginx
       uses: appleboy/ssh-action@master
       with:
-        host: 34.89.11.237
+        host: 121.5.142.169
         username: root
         password: ${{secrets.PSWD}}
         port: 22
         script: sudo service nginx restart &
-    
